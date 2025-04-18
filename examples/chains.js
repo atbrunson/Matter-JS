@@ -22,7 +22,7 @@ Example.chains = function() {
         engine: engine,
         options: {
             width: 800,
-            height: 600,
+            height: 800,
             showAngleIndicator: true,
             showCollisions: true,
             showVelocity: true
@@ -39,7 +39,7 @@ Example.chains = function() {
     var group = Body.nextGroup(true);
         
     var ropeA = Composites.stack(100, 50, 8, 1, 10, 10, function(x, y) {
-        return Bodies.rectangle(x, y, 50, 20, { collisionFilter: { group: group } });
+        return Bodies.rectangle(x, y, 20, 20, { collisionFilter: { group: group } });
     });
     
     Composites.chain(ropeA, 0.5, 0, -0.5, 0, { stiffness: 0.8, length: 2, render: { type: 'line' } });
@@ -66,8 +66,8 @@ Example.chains = function() {
     
     group = Body.nextGroup(true);
 
-    var ropeC = Composites.stack(600, 50, 13, 1, 10, 10, function(x, y) {
-        return Bodies.rectangle(x - 20, y, 50, 20, { collisionFilter: { group: group }, chamfer: 5 });
+    var ropeC = Composites.stack(600, 100, 20, 13, 10, 10, function(x, y) {
+        return Bodies.rectangle(x - 20, y, 60, 20, { collisionFilter: { group: group }, chamfer: 5 });
     });
     
     Composites.chain(ropeC, 0.3, 0, -0.3, 0, { stiffness: 1, length: 0 });

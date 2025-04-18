@@ -31,7 +31,7 @@ var demo = function(examples, isDev) {
         preventZoom: true,
         resetOnOrientation: true,
         routing: true,
-        startExample: 'mixed',
+        startExample: 'chains',
         examples: examples
     });
 
