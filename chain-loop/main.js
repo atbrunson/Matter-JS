@@ -82,8 +82,8 @@ let flinks = Composites.stack(250, 175 ,2 ,1 ,20 ,20 , function(x, y) {
 			})
 		});
 
-Composites.chain(flinks, 0.45 , -0.45, -0.45, -0.450, { stiffness: 0.001, length: 15, render: { type: 'line' } })
-Composites.chain(flinks, -0.45, 0.45, -0.45, 0.450, { stiffness: 0.001, length: 15, render: { type: 'line' } })	
+Composites.chain(flinks, 0.45 , 0.45, -0.45, -0.45, { stiffness: .000001, length: 20, render: { type: 'line' } })
+
 
 // add all of the bodies to the world
 Composite.add(world,[ ground, leftWall, rightWall, flinks]);
