@@ -70,5 +70,8 @@
     "CHANGELOG.md",
     "LICENSE",
     "package.json"
-  ]
+  ],
+  "dependencies": {
+    "@matter/cli-tool": "^0.12.6"
+  }
 }

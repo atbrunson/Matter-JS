@@ -1,3 +1,6 @@
+//matter.js testing
+
+
 // module aliases
 var Engine = Matter.Engine,
 	Render = Matter.Render,
@@ -77,7 +80,7 @@ let rightWall = Bodies.rectangle(825, 300, 60, 1000, { isStatic: true });
 ground.restitution = 1
 
 let flinks = Composites.stack(250, 175 ,2 ,1 ,20 ,20 , function(x, y) {
-	return Bodies.rectangle(x , y , 100, 50, {
+	return Bodies.rectangle(x , y , 200, 50, {
 
 			})
 		});
