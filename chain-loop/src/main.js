@@ -2,7 +2,7 @@
 
 
 // module aliases
-var Engine = Matter.Engine,
+const Engine = Matter.Engine,
 	Render = Matter.Render,
 	Runner = Matter.Runner,
 	Body = Matter.Body,
@@ -14,28 +14,26 @@ var Engine = Matter.Engine,
 	Bodies = Matter.Bodies;
 
 // create engine
-var engine = Engine.create(),
+let engine = Engine.create(),
 	world = engine.world;
 
 // set world properties
 	world.gravity.scale = 0.0
 
 // create renderer
-var render = Render.create({
+let render = Render.create({
 	element: document.body,
 	engine: engine,
 	options: {
 		width: 800,
 		height: 600,
+		wireframes: false,
 		showAngleIndicator: true,
 		showCollisions: true,
 		showVelocity: true,
 		showDebug: true,
 	}
 });
-
-console.log("")
-console.table(render)
 
 // fit the render viewport to the scene
 Render.lookAt(render, {
@@ -46,8 +44,6 @@ Render.lookAt(render, {
 // run the renderer
 Render.run(render);
 
-
-
 // create runner
 let runner = Runner.create();
 
@@ -55,7 +51,7 @@ let runner = Runner.create();
 Runner.run(runner, engine);
 
 // add mouse control
-var mouse = Mouse.create(render.canvas),
+let mouse = Mouse.create(render.canvas),
 	mouseConstraint = MouseConstraint.create(engine, {
 		mouse: mouse,
 		constraint: {
@@ -71,24 +67,100 @@ Composite.add(world, mouseConstraint);
 // keep the mouse in sync with rendering
 render.mouse = mouse;
 
-// create two boxes and a ground
-// let boxA = Bodies.rectangle(400, 200, 20, 20);
-//let boxB = Bodies.rectangle(450, 50, 20, 20);
-let ground = Bodies.rectangle(400, 625, 1000, 60, { isStatic: true });
-let leftWall = Bodies.rectangle(-25, 300, 60, 1000, { isStatic: true});
-let rightWall = Bodies.rectangle(825, 300, 60, 1000, { isStatic: true });
-ground.restitution = 1
+// create four boxes for walls floor & ceiling
+let box = Composite.create()
 
-let flinks = Composites.stack(250, 175 ,2 ,1 ,20 ,20 , function(x, y) {
-	return Bodies.rectangle(x , y , 200, 50, {
+let ground = Bodies.rectangle(400, 625, 1000, 60, {
+	isStatic: true,
+	restitution: 1,
 
+	});
+let leftWall = Bodies.rectangle(-25, 300, 60, 1000, {
+	isStatic: true,
+	restitution: 1,
+
+	});
+
+let rightWall = Bodies.rectangle(825, 300, 60, 1000, {
+	isStatic: true,
+	restitution: 1,
+
+	});
+
+let ceiling = Bodies.rectangle(400, -25, 1000, 60, {
+	isStatic: true,
+	restitution: 1,
+
+	});
+
+Composite.add(box, ground)
+Composite.add(box, leftWall)
+Composite.add(box, rightWall)
+Composite.add(box, ceiling)
+
+let linkDia = 30;
+let linkMass = 10;
+let cLength = 10;
+let cDamp = 1
+let cStiff = .1
+
+
+// generate ring of bodies
+// TODO:
+// - create function that generates a ring of bodies
+// - ringChain(, ringDia{default => no collisions}) circumference = bodies
+
+let flinks = Composites.stack(50, 175, 10, 1, 5, 5 , function(x, y) {
+	return Bodies.circle(x , y , linkDia, {
+			render: {fillStyle: "darkgrey"},
+			mass: linkMass,
+			dampening: cDamp,
+	
 			})
 		});
 
-Composites.chain(flinks, 0.45 , 0.45, -0.45, -0.45, { stiffness: .000001, length: 20, render: { type: 'line' } })
+
+// Composites.chain(flinks, 0.45 , 0, -0.45, 0, {
+// 	stiffness: cStiff,
+// 	length: cLength,
+// 	mass: linkMass,
+// 	render: {
+// 		type: 'spring', 
+// 		visible: true,
+// 		},
+
+// 	})
+
+// Add a constraint from the last chain body to the first chain body
+// TODO:
+// - should add closing constraint in the same way that the Composites.chain() does
+// - create function to close a chained composite
+// > funciton closeLoop(chain)
+
+// Composite.add(flinks, Constraint.create({
+// 	bodyA: flinks.bodies[flinks.bodies.length - 1],
+// 	pointA: { x: 30, y: 0},
+// 	bodyB: flinks.bodies[0],
+// 	pointB: { x: -30, y: 0 },
+// 	stiffness: cStiff,
+// 	length: cLength,
+	
+// 	render: {
+// 		type: 'spring',
+// 		visible: true,
+// 	},
+// 	}));
+
+flinks.bodies[0].render.fillStyle = "Red"
+flinks.bodies[flinks.bodies.length-1].render.fillStyle = "Blue"
 
 
-// add all of the bodies to the world
-Composite.add(world,[ ground, leftWall, rightWall, flinks]);
+
+Composite.add(world,
+	[box, flinks]
+);
+
+console.log(world)
+
 
 
