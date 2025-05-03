@@ -120,36 +120,40 @@ let flinks = Composites.stack(50, 175, 10, 1, 5, 5 , function(x, y) {
 		});
 
 
-// Composites.chain(flinks, 0.45 , 0, -0.45, 0, {
-// 	stiffness: cStiff,
-// 	length: cLength,
-// 	mass: linkMass,
-// 	render: {
-// 		type: 'spring', 
-// 		visible: true,
-// 		},
+Composites.chain(flinks, 0.45 , 0, -0.45, 0, {
+	stiffness: cStiff,
+	length: cLength,
+	mass: linkMass,
+	render: {
+		type: 'spring', 
+		visible: true,
+		},
 
-// 	})
+	})
 
-// Add a constraint from the last chain body to the first chain body
-// TODO:
-// - should add closing constraint in the same way that the Composites.chain() does
-// - create function to close a chained composite
-// > funciton closeLoop(chain)
+/*
 
-// Composite.add(flinks, Constraint.create({
-// 	bodyA: flinks.bodies[flinks.bodies.length - 1],
-// 	pointA: { x: 30, y: 0},
-// 	bodyB: flinks.bodies[0],
-// 	pointB: { x: -30, y: 0 },
-// 	stiffness: cStiff,
-// 	length: cLength,
+Add a constraint from the last chain body to the first chain body
+TODO:
+- should add closing constraint in the same way that the Composites.chain() does
+- create function to close a chained composite
+> function closeLoop(chain)
+
+*/
+
+Composite.add(flinks, Constraint.create({
+	bodyA: flinks.bodies[flinks.bodies.length - 1],
+	pointA: { x: 30, y: 0},
+	bodyB: flinks.bodies[0],
+	pointB: { x: -30, y: 0 },
+	stiffness: cStiff,
+	length: cLength,
 	
-// 	render: {
-// 		type: 'spring',
-// 		visible: true,
-// 	},
-// 	}));
+	render: {
+		type: 'spring',
+		visible: true,
+	},
+	}));
 
 flinks.bodies[0].render.fillStyle = "Red"
 flinks.bodies[flinks.bodies.length-1].render.fillStyle = "Blue"
@@ -160,7 +164,6 @@ Composite.add(world,
 	[box, flinks]
 );
 
-console.log(world)
 
 
 

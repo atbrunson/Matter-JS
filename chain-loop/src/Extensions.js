@@ -119,13 +119,10 @@ let Bodies = require('./Bodies');
 
 	currentY += maxHeight + rowGap;
 	currentX = x;
-}
 
 return ring;
-	
+};
 
-
-)
 
 
 
