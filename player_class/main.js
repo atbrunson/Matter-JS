@@ -1,5 +1,5 @@
 
-// Matter.jd Module Aliases
+// Matter.jd Module aliases
 
 const
 	Engine = Matter.Engine,
@@ -12,6 +12,7 @@ const
 	MouseConstraint = Matter.MouseConstraint,
 	Mouse = Matter.Mouse,
 	Bodies = Matter.Bodies;
+	Events = Matter.Events;
 
 // Create the ENGINE & the WORLD
 let engine = Engine.create(),
@@ -52,7 +53,7 @@ Render.lookAt(render, {
 	max: { x: 800, y: 600 }
 });
 
-// add mouse control
+// Add MOUSE control
 let mouse = Mouse.create(render.canvas),
 	mouseConstraint = MouseConstraint.create(engine, {
 		mouse: mouse,
@@ -100,14 +101,8 @@ Composite.add(box, leftWall)
 Composite.add(box, rightWall)
 Composite.add(box, ceiling)
 
-
-// generate ring of bodies
-// TODO:
-// - create function that generates a ring of bodies
-// - ringChain(, ringDia{default => no collisions}) circumference = bodies
-
+//create new PLAYER object
 let player1 = new Player(250, 250, 100)
-
 
 
 
