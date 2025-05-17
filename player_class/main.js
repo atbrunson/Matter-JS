@@ -1,5 +1,5 @@
 
-// Matter.jd Module Aliases
+// Matter.js Module Aliases
 
 const
 	Engine = Matter.Engine,
@@ -25,7 +25,6 @@ let runner = Runner.create();
 
 // Run the ENGINE
 Runner.run(runner, engine);
-
 
 // Create RENDERER
 let render = Render.create({
