@@ -49,7 +49,6 @@ Example.views = function() {
         });
 
     Composite.add(world, mouseConstraint);
-
     // keep the mouse in sync with rendering
     render.mouse = mouse;
 

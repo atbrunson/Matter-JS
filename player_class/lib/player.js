@@ -16,9 +16,8 @@ class Player {
 	 */
 	constructor(x, y, height, width, options = {}) {
 
-		this.body = Matter.Bodies.rectangle(x, y, width, height, {
-			chamfer: { radius: width / 2.2, ...options }
-			}
+		this.body = Matter.Bodies.rectangle(x, y, width = height/2, height, { chamfer: { radius: width / 2.2 } }
+
 		);
 		Matter.World.add(engine.world, this.body);
 	}
