@@ -11,10 +11,10 @@ class Player {
 	 * @param {Number} x of initial location
 	 * @param {Number} y of initial location
 	 * @param {Number} height of new object
-	 * @param {Number} [width = height/2] will default to half the height
+	 * @param {Number} width will default to half the height
 	 * @param {{}} [options] will default with standard properies
 	 */
-	constructor(x, y, height, width, options = {}) {
+	constructor(x, y, height, width = height / 2, options = {}) {
 
 		this.body = Matter.Bodies.rectangle(x, y, width = height/2, height, { chamfer: { radius: width / 2.2 } }
 
@@ -34,6 +34,14 @@ class Player {
 
 	moveRight(speed) {
 		Matter.Body.setVelocity(this.body, { x: speed, y: this.body.velocity.y });
+	}
+
+	moveUp(speed) {
+		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: -speed });
+	}
+
+	moveUp(speed) {
+		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: speed });
 	}
 
 	jump(force) {
