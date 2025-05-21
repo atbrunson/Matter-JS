@@ -134,11 +134,14 @@ Events.on(render, 'beforeRender', function () {
 		&& Math.abs(deltaCentre.x) < render.canvas.width / 2 - 10
 		&& Math.abs(deltaCentre.y) > render.canvas.height / 2 - 200
 		&& Math.abs(deltaCentre.y) < render.canvas.height / 2 - 10) {
+		
 		// create a vector to translate the view, allowing the user to control view speed
-		var direction = Vector.normalise(deltaCentre),
+		var direction = Vector.normalise(deltaCentre), // <-- speed = 0 at 0, 90, 180, 270 degrees from normalized?
 			speed = Math.min(10, Math.pow(centreDist - 50, 2) * 0.00001);
-		text(`dir: ${direction.x}${direction.y},spd ${speed}`);
-
+		
+		// Show so translatation direction and speed
+		render.context.fillText(`dir: ${direction.x}${direction.y},spd ${speed}`, mouse.absolute.x + 10, mouse.absolute.y + 10);
+		// Translate in direction at speed
 		translate = Vector.mult(direction., speed);
 
 		// prevent the view moving outside the extents
