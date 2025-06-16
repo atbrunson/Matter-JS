@@ -120,24 +120,21 @@ Events.on(render, 'beforeRender', function () {
 
 	// get vector from mouse relative to centre of viewport
 	var deltaCentre = Vector.sub(mouse.absolute, viewportCentre),
-		centreDist = Vector.magnitude(deltaCentre);
-
+		centreDist = Vector.magnitude(deltaCentre),
 		
 
 
 
-	//centreDist > testWid && centreDist < render.canvas.width / 2 - 5) {
+	// centreDist > testWid && centreDist < render.canvas.width / 2 - 5) {
 	// translate the view if mouse has moved over 50px from the centre of viewport
-	/*
-	
- 	scrolling = if(
-  		Math.abs(deltaCentre.x) > render.canvas.width /2 * 0.75 && Math.abs(deltaCentre.x) < render.canvas.width /2
- 	     || Math.abs(deltaCentre.y) > render.canvas.hieght /2 * 0.75 && Math.abs(deltaCentre.y) < render.canvas.height /2
  	
-	!scrolling ? speed = 0 :
- 		{
+ 	let scrolling =	Math.abs(deltaCentre.x) > render.canvas.width /2 * 0.75 && Math.abs(deltaCentre.x) < render.canvas.width /2
+ 	     		||	Math.abs(deltaCentre.y) > render.canvas.hieght /2 * 0.75 && Math.abs(deltaCentre.y) < render.canvas.height /2;
+		
+ 	
+	!scrolling ? speed = 0 : {
    		// create a vector to translate the view, allowing the user to control view speed
-		var direction = Vector.normalise(deltaCentre), // <-- speed = 0 at 0, 90, 180, 270 degrees from normalized?
+		var direction = Vector.normalise(deltaCentre), // normalize => unit vector
 			speed = Math.min(1, Math.pow(centreDist - 50, 2) * 0.00001);
 		
 		// Translate in direction at speed
@@ -160,10 +157,11 @@ Events.on(render, 'beforeRender', function () {
 		Bounds.translate(render.bounds, translate);
 
 		// we must update the mouse too
-		Mouse.setOffset(mouse, render.bounds.min);
-		}
+		Mouse.setOffset(mouse, render.bounds.min)
+	};
+});
   
-	*/
+/* 
 	if (Math.abs(deltaCentre.x) > render.canvas.width / 2 - 200
 		&& Math.abs(deltaCentre.x) < render.canvas.width / 2 - 10
 		&& Math.abs(deltaCentre.y) > render.canvas.height / 2 - 200
@@ -197,17 +195,16 @@ Events.on(render, 'beforeRender', function () {
 		// we must update the mouse too
 		Mouse.setOffset(mouse, render.bounds.min);
 	}
-});
 
+*/
+
+// create & add four boxes for walls floor & ceiling to world
 let box = {}
-
-// create four boxes for walls floor & ceiling
 Composite.add(world, [
 	box,
-	// walls
-	Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),   // Change to (render.options.width/2 , 0 , render.options.width , 50)
-	Bodies.rectangle(400, 600, 800, 50, { isStatic: true }), // Change to (render.options.width/2 , render.options.height , render.options.width , 50)
-	Bodies.rectangle(800, 300, 50, 600, { isStatic: true }), // Change to (render.options.width , render.options.height/2 , 50 , render.options.hieght)
-	Bodies.rectangle(0, 300, 50, 600, { isStatic: true })    // Change to (0 , render.options.height/2 , 50 , render.options.hieght)
+	Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),  // CEILING 		Change to (render.options.width/2 , 0 , render.options.width , 50)
+	Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),// WALL RIGHT 	Change to (render.options.width , render.options.height/2 , 50 , render.options.hieght)
+	Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),// FLOOR 		Change to (render.options.width/2 , render.options.height , render.options.width , 50)
+	Bodies.rectangle(0, 300, 50, 600, { isStatic: true })	// WALL LEFT 	Change to (0 , render.options.height/2 , 50 , render.options.hieght)
 ]);
 
