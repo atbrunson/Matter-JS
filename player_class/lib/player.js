@@ -5,7 +5,7 @@
  */
 
 /** @class Object that accept user input to interact with the engine.world */
-class Player {
+export class Player {
 	/**
 	 * @constructs Player object
 	 * @param {Number} x of initial location
@@ -40,13 +40,18 @@ class Player {
 		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: -speed });
 	}
 
-	moveUp(speed) {
+	moveDown(speed) {
 		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: speed });
 	}
-
-	jump(force) {
-		Matter.Body.applyForce(this.body, this.body.position, { x: 0, y: -force });
+	
+	rotateLeft(rotation) {
+		Matter.Body.setAngularVelocity(this.body, {})
 	}
+	
+	
+	// jump(force) {
+	// 	Matter.Body.applyForce(this.body, this.body.position, { x: 0, y: -force });
+	// }
 
 	update() {
 		// Additional logic to update player state
