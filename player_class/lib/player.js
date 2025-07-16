@@ -16,9 +16,7 @@ export class Player {
 	 */
 	constructor(x, y, height, width = height / 2, options = {}) {
 
-		this.body = Matter.Bodies.rectangle(x, y, width = height/2, height, { chamfer: { radius: width / 2.2 } }
-
-		);
+		this.body = Matter.Bodies.rectangle(x, y, width = height / 2, height, { chamfer: { radius: width / 2.2 } });
 		Matter.World.add(engine.world, this.body);
 	}
 
@@ -43,12 +41,12 @@ export class Player {
 	moveDown(speed) {
 		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: speed });
 	}
-	
+
 	rotateLeft(rotation) {
 		Matter.Body.setAngularVelocity(this.body, {})
 	}
-	
-	
+
+
 	// jump(force) {
 	// 	Matter.Body.applyForce(this.body, this.body.position, { x: 0, y: -force });
 	// }

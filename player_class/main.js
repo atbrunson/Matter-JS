@@ -122,53 +122,12 @@ Events.on(render, 'beforeRender', function () {
 	// get vector from mouse relative to centre of viewport
 	var deltaCentre = Vector.sub(mouse.absolute, viewportCentre),
 		centreDist = Vector.magnitude(deltaCentre);
+ 
 
-		
-
-
-
-	//centreDist > testWid && centreDist < render.canvas.width / 2 - 5) {
-	// translate the view if mouse has moved over 50px from the centre of viewport
-	/*
-	
- 	scrolling = if(
-  		Math.abs(deltaCentre.x) > render.canvas.width /2 * 0.75 && Math.abs(deltaCentre.x) < render.canvas.width /2
- 	     || Math.abs(deltaCentre.y) > render.canvas.hieght /2 * 0.75 && Math.abs(deltaCentre.y) < render.canvas.height /2
- 	
-	!scrolling ? speed = 0 :
- 		{
-   		// create a vector to translate the view, allowing the user to control view speed
-		var direction = Vector.normalise(deltaCentre), // <-- speed = 0 at 0, 90, 180, 270 degrees from normalized?
-			speed = Math.min(1, Math.pow(centreDist - 50, 2) * 0.00001);
-		
-		// Translate in direction at speed
-		translate = Vector.mult(direction, speed);
-
-		// prevent the view moving outside the extents
-		if (render.bounds.min.x + translate.x < extents.min.x)
-			translate.x = extents.min.x - render.bounds.min.x;
-
-		if (render.bounds.max.x + translate.x > extents.max.x)
-			translate.x = extents.max.x - render.bounds.max.x;
-
-		if (render.bounds.min.y + translate.y < extents.min.y)
-			translate.y = extents.min.y - render.bounds.min.y;
-
-		if (render.bounds.max.y + translate.y > extents.max.y)
-			translate.y = extents.max.y - render.bounds.max.y;
-
-		// move the view
-		Bounds.translate(render.bounds, translate);
-
-		// we must update the mouse too
-		Mouse.setOffset(mouse, render.bounds.min);
-		}
-  
-	*/
-	if (Math.abs(deltaCentre.x) > render.canvas.width / 2 - 200
-		&& Math.abs(deltaCentre.x) < render.canvas.width / 2 - 10
-		&& Math.abs(deltaCentre.y) > render.canvas.height / 2 - 200
-		&& Math.abs(deltaCentre.y) < render.canvas.height / 2 - 10) {
+	if (Math.abs(deltaCentre.x) > 0.975 * render.canvas.width / 2		//Used canvas pecentages for boundry dection 97.5% --> 100%
+		&& Math.abs(deltaCentre.x) < render.canvas.width / 2
+		|| Math.abs(deltaCentre.y) > 0.975 * render.canvas.height / 2
+		&& Math.abs(deltaCentre.y) < render.canvas.height / 2) {
 		
 		// create a vector to translate the view, allowing the user to control view speed
 		var direction = Vector.normalise(deltaCentre), // <-- speed = 0 at 0, 90, 180, 270 degrees from normalized?
