@@ -136,7 +136,7 @@ Events.on(render, 'beforeRender', function () {
 		// Show so translatation direction and speed
 		render.context.fillText(`dir: ${direction.x}${direction.y},spd ${speed}`, mouse.absolute.x + 10, mouse.absolute.y + 10);
 		// Translate in direction at speed
-		translate = Vector.mult(direction., speed);
+		translate = Vector.mult(direction, speed);
 
 		// prevent the view moving outside the extents
 		if (render.bounds.min.x + translate.x < extents.min.x)
@@ -175,5 +175,5 @@ Composite.add(world, [
 
 
 //create new PLAYER object
-let player1 = new Player(250, 250, 100)
+//let player1 = new Player(250, 250, 100)
 
