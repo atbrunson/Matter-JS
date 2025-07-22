@@ -4,8 +4,11 @@
  * @requires Matter 
  */
 
-/** @class Object that accept user input to interact with the engine.world */
-export class Player {
+/** @class Player Object that accept user input to interact with the engine.world */
+
+
+
+class Player {
 	/**
 	 * @constructs Player object
 	 * @param {Number} x of initial location
@@ -57,3 +60,5 @@ export class Player {
 	}
 
 }
+
+module.exports = Player;

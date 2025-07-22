@@ -16,19 +16,19 @@ var Engine = Matter.Engine,
 	Bounds = Matter.Bounds;
 
 // Create the ENGINE
-let engine = Engine.create(),
+var engine = Engine.create(),
 	world = engine.world;
 
 // Set WORLD Properties
 world.gravity.scale = 0.0
 
-// Create the RUNNER
-let runner = Runner.create();
+// Create & start the RUNNER
+var runner = Runner.create();
 Runner.run(runner, engine);
 
 
-// Create RENDERER
-let render = Render.create({
+// Create & start the RENDERER
+var render = Render.create({
 	element: document.body,
 	engine: engine,
 	options: {
@@ -37,23 +37,21 @@ let render = Render.create({
 		hasBounds: true,
 		wireframes: false,
 		showAngleIndicator: true,
-		showCollisions: true,
+		showCollisions: false,
 		showVelocity: true,
 		showDebug: true,
 	}
 });
-
-
 Render.run(render);
 
-// Add MOUSE control
-let mouse = Mouse.create(render.canvas),
+// Add mouse element and mouse contraint to allow mouse controls
+var mouse = Mouse.create(render.canvas),
 	mouseConstraint = MouseConstraint.create(engine, {
 		mouse: mouse,
 		constraint: {
 			stiffness: 0.2,
 			render: {
-				visible: true
+				visible: false
 			}
 		}
 	});
@@ -81,14 +79,25 @@ var boundsScaleTarget = 1,
 		y: 1
 	};
 
+// create and additional render proerty to track if in focus
+	render.canvas.setAttribute('tabindex', '0');
+
+	render.canvas.addEventListener('mouseover', function() {
+		render.canvas.hoverOver = true;
+		//console.log(`Hover over: ${render.canvas.hoverOver}`)
+	});
+	render.canvas.addEventListener('mouseout', function() {
+		render.canvas.hoverOver = false
+		//console.log(`Hover over: ${render.canvas.hoverOver}`)
+	});
+
 // use a render event to control our view
 Events.on(render, 'beforeRender', function () {
-	var world = engine.world,
-		mouse = mouseConstraint.mouse,
+	let mouse = mouseConstraint.mouse,
 		translate;
 
 	// BROKEN: Mouse scroll wheel controls 
-	var scaleFactor = mouse.wheelDelta * -0.1;
+	let scaleFactor = mouse.wheelDelta * -0.1;
 	if (scaleFactor !== 0) {
 		if ((scaleFactor < 0 && boundsScale.x >= 0.6) || (scaleFactor > 0 && boundsScale.x <= 1.4)) {
 			boundsScaleTarget += scaleFactor;
@@ -119,25 +128,33 @@ Events.on(render, 'beforeRender', function () {
 		Mouse.setOffset(mouse, render.bounds.min);
 	}
 
-	// TODO: Scroll should only translate inside the extents
 	// get vector from mouse relative to centre of viewport
-	var deltaCentre = Vector.sub(mouse.absolute, viewportCentre),
+	let deltaCentre = Vector.sub(mouse.absolute, viewportCentre),
 		centreDist = Vector.magnitude(deltaCentre);
+	
+	// if the mouse is within 80% of the viewport width or height, allow scrolling
+	// this is to prevent accidental scrolling when mouse moves out of the viewport
+	let scrolling = render.canvas.hoverOver
+	&& Math.abs(deltaCentre.x) >= 0.80 * render.canvas.width / 2
+	&& Math.abs(deltaCentre.x) < render.canvas.width / 2
+	|| render.canvas.hoverOver
+	&& Math.abs(deltaCentre.y) >= 0.80 * render.canvas.height / 2
+	&& Math.abs(deltaCentre.y) < render.canvas.height / 2;
 
-	// check if the mouse is far enough from the centre to scroll
-	// and not too close to the edge of the viewport	
-	var scrolling = Math.abs(deltaCentre.x) >= 0.85 * render.canvas.width / 2
-	&& Math.abs(deltaCentre.x) < render.canvas.width / 2 - 5
-	|| Math.abs(deltaCentre.y) >= 0.85 * render.canvas.height / 2
-	&& Math.abs(deltaCentre.y) < render.canvas.height / 2 - 5;
-	
-	
-	console.log('scrolling', scrolling, 'mouse', mouse.absolute, centreDist);
+	//DISPLAY MOUSE POSITION
+	// console.log(`
+	// 	scrolling: ${scrolling}
+	// 	m.offset:  ${mouse.offset.x}, ${mouse.offset.y}
+	// 	m.position: ${mouse.position.x}, ${mouse.position.y}
+	// 	m.absolute: ${mouse.absolute.x}, ${mouse.absolute.y}
+	// 	deltaCentre: ${deltaCentre.x}, ${deltaCentre.y}
+	// 	centreDist: ${centreDist}
+	// 	`);
 
 	if (scrolling) {
 
 		// create a vector to translate the view, allowing the user to control view speed
-		var direction = Vector.normalise(deltaCentre),
+		let direction = Vector.normalise(deltaCentre),
 			speed = Math.min(10, Math.pow(centreDist, 2) * 0.00001);
 
 		// Show so translatation direction and speed
@@ -164,6 +181,8 @@ Events.on(render, 'beforeRender', function () {
 
 		// we must update the mouse too
 		Mouse.setOffset(mouse, render.bounds.min);
+		
+	
 	}
 
 
@@ -182,7 +201,7 @@ Composite.add(world, [
 ]);
 
 
-//BROKEN: player class reference
+
 //create new PLAYER object
-let player1 = new Player(250, 250, 100)
+let player1 = new Player(250, 250, 75)
 
