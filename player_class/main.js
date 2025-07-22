@@ -53,7 +53,7 @@ let mouse = Mouse.create(render.canvas),
 		constraint: {
 			stiffness: 0.2,
 			render: {
-				visible: false
+				visible: true
 			}
 		}
 	});
@@ -87,7 +87,7 @@ Events.on(render, 'beforeRender', function () {
 		mouse = mouseConstraint.mouse,
 		translate;
 
-	// mouse wheel controls zoom
+	// BROKEN: Mouse scroll wheel controls 
 	var scaleFactor = mouse.wheelDelta * -0.1;
 	if (scaleFactor !== 0) {
 		if ((scaleFactor < 0 && boundsScale.x >= 0.6) || (scaleFactor > 0 && boundsScale.x <= 1.4)) {
@@ -97,7 +97,7 @@ Events.on(render, 'beforeRender', function () {
 
 	// if scale has changed
 	if (Math.abs(boundsScale.x - boundsScaleTarget) > 0.01) {
-		// smoothly tween scale factor
+		// smoothly translate between scale factors
 		scaleFactor = (boundsScaleTarget - boundsScale.x) * 0.2;
 		boundsScale.x += scaleFactor;
 		boundsScale.y += scaleFactor;
@@ -119,22 +119,30 @@ Events.on(render, 'beforeRender', function () {
 		Mouse.setOffset(mouse, render.bounds.min);
 	}
 
+	// TODO: Scroll should only translate inside the extents
 	// get vector from mouse relative to centre of viewport
 	var deltaCentre = Vector.sub(mouse.absolute, viewportCentre),
 		centreDist = Vector.magnitude(deltaCentre);
- 
 
-	if (Math.abs(deltaCentre.x) > 0.975 * render.canvas.width / 2		//Used canvas pecentages for boundry dection 97.5% --> 100%
-		&& Math.abs(deltaCentre.x) < render.canvas.width / 2
-		|| Math.abs(deltaCentre.y) > 0.975 * render.canvas.height / 2
-		&& Math.abs(deltaCentre.y) < render.canvas.height / 2) {
-		
+	// check if the mouse is far enough from the centre to scroll
+	// and not too close to the edge of the viewport	
+	var scrolling = Math.abs(deltaCentre.x) >= 0.85 * render.canvas.width / 2
+	&& Math.abs(deltaCentre.x) < render.canvas.width / 2 - 5
+	|| Math.abs(deltaCentre.y) >= 0.85 * render.canvas.height / 2
+	&& Math.abs(deltaCentre.y) < render.canvas.height / 2 - 5;
+	
+	
+	console.log('scrolling', scrolling, 'mouse', mouse.absolute, centreDist);
+
+	if (scrolling) {
+
 		// create a vector to translate the view, allowing the user to control view speed
-		var direction = Vector.normalise(deltaCentre), // <-- speed = 0 at 0, 90, 180, 270 degrees from normalized?
-			speed = Math.min(10, Math.pow(centreDist - 50, 2) * 0.00001);
-		
+		var direction = Vector.normalise(deltaCentre),
+			speed = Math.min(10, Math.pow(centreDist, 2) * 0.00001);
+
 		// Show so translatation direction and speed
 		render.context.fillText(`dir: ${direction.x}${direction.y},spd ${speed}`, mouse.absolute.x + 10, mouse.absolute.y + 10);
+
 		// Translate in direction at speed
 		translate = Vector.mult(direction, speed);
 
@@ -157,6 +165,8 @@ Events.on(render, 'beforeRender', function () {
 		// we must update the mouse too
 		Mouse.setOffset(mouse, render.bounds.min);
 	}
+
+
 });
 
 let box = {}
@@ -172,8 +182,7 @@ Composite.add(world, [
 ]);
 
 
-
-
+//BROKEN: player class reference
 //create new PLAYER object
-//let player1 = new Player(250, 250, 100)
+let player1 = new Player(250, 250, 100)
 

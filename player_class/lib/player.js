@@ -1,6 +1,6 @@
 /**
  * @module Player Class for Matter.js
- * @author atbrunson (github.com/atbrunson)
+ * @author atbrunson github.com/atbrunson
  * @requires Matter 
  */
 
@@ -12,16 +12,16 @@ export class Player {
 	 * @param {Number} y of initial location
 	 * @param {Number} height of new object
 	 * @param {Number} width will default to half the height
-	 * @param {{}} [options] will default with standard properies
+	 * @param {{}} [options] will default with standard matter.js properies
 	 */
 	constructor(x, y, height, width = height / 2, options = {}) {
 
-		this.body = Matter.Bodies.rectangle(x, y, width = height / 2, height, { chamfer: { radius: width / 2.2 } });
+		this.body = Matter.Bodies.rectangle(x, y, width , height, { chamfer: { radius: width / 2.2 } });
 		Matter.World.add(engine.world, this.body);
 	}
 
 	/**
-	 * @todo implement keeping the Player object centered in the viewPort
+	 * @todo: implement keeping the Player object centered in the viewPort
 	 */
 	follow() {
 		// Needs viewPoint logic
