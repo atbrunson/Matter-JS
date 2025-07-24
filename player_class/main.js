@@ -80,7 +80,7 @@ var boundsScaleTarget = 1,
 	};
 
 // create and additional render proerty to track if in focus
-	render.canvas.setAttribute('tabindex', '0');
+
 
 	render.canvas.addEventListener('mouseover', function() {
 		render.canvas.hoverOver = true;
