@@ -218,7 +218,6 @@ let box = {}
 
 // create four boxes for walls floor & ceiling
 Composite.add(world, [
-	box,
 	// walls
 	Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
 	Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),
@@ -229,6 +228,7 @@ Composite.add(world, [
 
 
 //create new PLAYER object
-var player = new Player(400, 300, 25);
-console.log(player)
+// var player = new Player(400, 300, 25);
+// console.log(player)
 
+var ship = new Ship(400, 300, 3, 50);
