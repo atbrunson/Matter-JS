@@ -90,6 +90,9 @@ render.canvas.addEventListener('mouseout', function() {
 	//console.log(`Hover over: ${render.canvas.hoverOver}`)
 });
 
+
+
+
 let wheelCounter = 0
 
 render.canvas.addEventListener('wheel', function() {
@@ -100,6 +103,13 @@ console.log(`
 
 	`)
 })
+//logs keyup events
+document.addEventListener('keyup', function(event) {
+	console.log(`keyup: ${event.key}`);
+	} 
+)
+
+
 
 // use the matter.js render events to control view
 Events.on(render, 'beforeRender', function () {
@@ -219,5 +229,6 @@ Composite.add(world, [
 
 
 //create new PLAYER object
-let player1 = new Player(250, 250, 75)
+var player = new Player(400, 300, 25);
+console.log(player)
 
