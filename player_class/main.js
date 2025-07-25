@@ -16,7 +16,7 @@ var Engine = Matter.Engine,
 	Bounds = Matter.Bounds,
 	Detector = Matter.Detector;
 
-	// Create the ENGINE
+// Create the ENGINE
 var engine = Engine.create(),
 	world = engine.world;
 
@@ -217,7 +217,7 @@ Composite.add(world, [
 ]);
 
 
-//TODO: Find matter.js keyboard events
-//create PLAYER object instance
+
+//create new PLAYER object
 let player1 = new Player(250, 250, 75)
 
