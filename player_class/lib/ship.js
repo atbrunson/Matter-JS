@@ -1,5 +1,5 @@
 /**
- * @module Player Class for Matter.js
+ * @module Ship Class for Matter.js
  * @author atbrunson github.com/atbrunson
  * @requires Matter
  * @requires KeyboardControl
@@ -16,34 +16,36 @@
  * const player = new Player(100, 100, 50);
  */
 
-class Player {
+class Ship {
 	/**
-	 * @constructs Player object
+	 * @constructs Ship object
 	 * @param {Number} x of initial location
 	 * @param {Number} y of initial location
 	 * @param {Number} height of new object
 	 * @param {Number} width will default to half the height
-	 * @param {{}} [options] will default with standard matter.js properties
+	 * @param {{}} [options] will default with standard matter.js properies
 	 */
-	constructor(x, y, height, width = height / 2, options = {}) {
+	constructor(x, y, sides, radius, options = {}) {
+        
+        // build the ship from array of bodies
+        this.body = Bodies.polygon(x, y, sides, radius, { chamfer: { radius: radius / 6 } }),
 
-		this.body = Matter.Bodies.rectangle(x, y, width, height, { chamfer: { radius: width / 2.2 } });
-		this.body.label = 'Player';
-		Matter.World.add(engine.world, this.body);
+		Matter.Body.setAngle(this.body, Math.PI/2);
+        Matter.Body.setCentre(this.body, { x: x, y: y+10 });
+        
+        Matter.World.add(engine.world, this.body);
 
 		// Setup the player controler
 		this.controler = new KeyboardControl();
-		this.controler.bindKey('w', () => this.moveUp(5), () => this.stop());
-		this.controler.bindKey('a', () => this.moveLeft(5), () => this.stop());
-		this.controler.bindKey('s', () => this.moveDown(5), () => this.stop());
-		this.controler.bindKey('d', () => this.moveRight(5), () => this.stop());
+		this.controler.bindKey('w', () => this.thrust(0.01));
 		this.controler.bindKey('e', () => this.rotateRight(0.1), () => this.rotateLeft(0));
 		this.controler.bindKey('q', () => this.rotateLeft(0.1), () => this.rotateRight(0));
 
 		this.controler.init();
-		console.log('Player created at', x, y, 'with size', width, height);
+		console.log('Ship created at', x, y, 'with size', radius);
 		console.log(this);
-	}
+	
+    }
 
 	/**
 	 * @method follow
@@ -53,37 +55,15 @@ class Player {
 	follow() {
 		// Needs viewPoint logic
 	}
+
 	/**
-	 * @method moveUp
-	 * @param {Number} speed - The speed at which the player moves up.
+	 * @method thrust
+	 * @param {Number} force - The speed at which the player moves up.
 	 * @description Moves the player up by setting its velocity.
 	 */
-	moveUp(speed) {
-		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: -speed });
-	}
-	/**
-	 * @method moveLeft
-	 * @param {Number} speed - The speed at which the player moves left.
-	 * @description Moves the player left by setting its velocity.
-	 */
-	moveLeft(speed) {
-		Matter.Body.setVelocity(this.body, { x: -speed, y: this.body.velocity.y });
-	}
-	/**
-	 * @method moveDown
-	 * @param {Number} speed - The speed at which the player moves down.
-	 * @description Moves the player down by setting its velocity.
-	 */
-	moveDown(speed) {
-		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: speed });
-	}
-	/**
-	 * @method moveRight
-	 * @param {*} speed  - The speed at which the player moves right.
-	 * @description Moves the player right by setting its velocity.
-	 */
-	moveRight(speed) {
-		Matter.Body.setVelocity(this.body, { x: speed, y: this.body.velocity.y });
+	thrust(force) {
+		Matter.Body.applyForce(this.body, this.body.position, {x: 0, y: -force})
+        console.log(this.body.force)
 	}
 
 	/** @method rotateLeft
@@ -91,12 +71,14 @@ class Player {
 	*/
 	rotateLeft(rotation) {
 		Matter.Body.setAngularVelocity(this.body, -rotation)
+        console.log(`Rotating right by ${this.body.angle}`)
 	}
 	/** @method rotateRight
 	 * @param {Number} rotation - The amount to rotate the player right.
 	*/
 	rotateRight(rotation) {
-		Matter.Body.setAngularVelocity(this.body, rotation)
+		Matter.Body.setAngularVelocity(this.body, rotation);
+        console.log(`Rotating right by ${this.body.angle}`)
 	}
 
 	/**

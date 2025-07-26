@@ -13,7 +13,8 @@ var Engine = Matter.Engine,
 	Mouse = Matter.Mouse,
 	MouseConstraint = Matter.MouseConstraint,
 	Vector = Matter.Vector,
-	Bounds = Matter.Bounds;
+	Bounds = Matter.Bounds,
+	Detector = Matter.Detector;
 
 // Create the ENGINE
 var engine = Engine.create(),
@@ -79,7 +80,7 @@ var boundsScaleTarget = 1,
 		y: 1
 	};
 
-// create and additional render property to track if in focus
+// create and additional render proerty to track if the mouse is hovering over the canvas
 render.canvas.addEventListener('mouseover', function() {
 	render.canvas.hoverOver = true;
 	//console.log(`Hover over: ${render.canvas.hoverOver}`)
@@ -89,17 +90,43 @@ render.canvas.addEventListener('mouseout', function() {
 	//console.log(`Hover over: ${render.canvas.hoverOver}`)
 });
 
-// use a render event to control our view
+
+
+
+let wheelCounter = 0
+
+render.canvas.addEventListener('wheel', function() {
+console.log(`
+
+	matter wheel: ${mouse.wheelDelta}
+	wheelcounter: ${wheelCounter}
+
+	`)
+})
+//logs keyup events
+document.addEventListener('keyup', function(event) {
+	console.log(`keyup: ${event.key}`);
+	} 
+)
+
+
+
+// use the matter.js render events to control view
 Events.on(render, 'beforeRender', function () {
-	let mouse = mouseConstraint.mouse,
-		translate;
+	var translate;
 
 	// BROKEN: Mouse scroll wheel controls 
-	let scaleFactor = mouse.wheelDelta * -0.1;
+	var scaleFactor = mouse.wheelDelta * -0.1;
+	
+	wheelCounter += mouse.wheelDelta
+	
+
+	
 	if (scaleFactor !== 0) {
 		if ((scaleFactor < 0 && boundsScale.x >= 0.6) || (scaleFactor > 0 && boundsScale.x <= 1.4)) {
 			boundsScaleTarget += scaleFactor;
 		}
+		console.log(`scaleFactor: ${scaleFactor}, boundsScaleTarget: ${boundsScaleTarget}`);
 	}
 
 	// if scale has changed
@@ -124,6 +151,7 @@ Events.on(render, 'beforeRender', function () {
 		// update mouse
 		Mouse.setScale(mouse, boundsScale);
 		Mouse.setOffset(mouse, render.bounds.min);
+
 	}
 
 	// get vector from mouse relative to centre of viewport
@@ -189,7 +217,6 @@ let box = {}
 
 // create four boxes for walls floor & ceiling
 Composite.add(world, [
-	box,
 	// walls
 	Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
 	Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),
@@ -200,6 +227,7 @@ Composite.add(world, [
 
 
 //create new PLAYER object
-let player1 = new Player(250, 250, 75)
-player1.speed = 5;
-player1.update()
+// var player = new Player(400, 300, 25);
+// console.log(player)
+
+var ship = new Ship(400, 300, 3, 50);
