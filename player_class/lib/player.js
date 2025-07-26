@@ -15,12 +15,23 @@ class Player {
 	 * @param {Number} y of initial location
 	 * @param {Number} height of new object
 	 * @param {Number} width will default to half the height
-	 * @param {{}} [options] will default with standard matter.js properies
+	 * @param {{}} [options] will default with standard matter.js properties
 	 */
 	constructor(x, y, height, width = height / 2, options = {}) {
 
 		this.body = Matter.Bodies.rectangle(x, y, width , height, { chamfer: { radius: width / 2.2 } });
 		Matter.World.add(engine.world, this.body);
+	}
+
+	init() {
+		// Initialize keyboard control
+		this.playerController = new KeyboardControl();
+		
+		// Bind keys to player actions
+		this.playerController.bindKey('w', () => this.moveUp(this.speed));
+		this.playerController.bindKey('a', () => this.moveLeft(this.speed));
+		this.playerController.bindKey('s', () => this.moveDown(this.speed));
+		this.playerController.bindKey('d', () => this.moveRight(this.speed));
 	}
 
 	/**
@@ -55,8 +66,20 @@ class Player {
 	// }
 
 	update() {
-		// Additional logic to update player state
 
+		// Check for key bindings and move the player accordingly
+		if (this.playerController.keyBindings['w']) {
+			this.moveUp(this.speed);
+		}
+		if (this.playerController.keyBindings['a']) {
+			this.moveLeft(this.speed);
+		}
+		if (this.playerController.keyBindings['s']) {
+			this.moveDown(this.speed);
+		}
+		if (this.playerController.keyBindings['d']) {
+			this.moveRight(this.speed);
+		}
+		//else {speed = 0;}
 	}
-
 }

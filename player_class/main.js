@@ -79,17 +79,15 @@ var boundsScaleTarget = 1,
 		y: 1
 	};
 
-// create and additional render proerty to track if in focus
-
-
-	render.canvas.addEventListener('mouseover', function() {
-		render.canvas.hoverOver = true;
-		//console.log(`Hover over: ${render.canvas.hoverOver}`)
-	});
-	render.canvas.addEventListener('mouseout', function() {
-		render.canvas.hoverOver = false
-		//console.log(`Hover over: ${render.canvas.hoverOver}`)
-	});
+// create and additional render property to track if in focus
+render.canvas.addEventListener('mouseover', function() {
+	render.canvas.hoverOver = true;
+	//console.log(`Hover over: ${render.canvas.hoverOver}`)
+});
+render.canvas.addEventListener('mouseout', function() {
+	render.canvas.hoverOver = false
+	//console.log(`Hover over: ${render.canvas.hoverOver}`)
+});
 
 // use a render event to control our view
 Events.on(render, 'beforeRender', function () {
@@ -181,8 +179,7 @@ Events.on(render, 'beforeRender', function () {
 
 		// we must update the mouse too
 		Mouse.setOffset(mouse, render.bounds.min);
-		
-	
+			
 	}
 
 
@@ -204,4 +201,5 @@ Composite.add(world, [
 
 //create new PLAYER object
 let player1 = new Player(250, 250, 75)
-
+player1.speed = 5;
+player1.update()
