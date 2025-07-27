@@ -48,7 +48,7 @@ class KeyboardControl {
      */
     unbindKey(key) {
         delete this.keyBindings[key];
-
+        delete this.keyBindings[key + "Up"];
     }
     /**
      * Handles the keydown event and triggers the bound action for the pressed key.

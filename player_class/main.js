@@ -45,7 +45,7 @@ var render = Render.create({
 });
 Render.run(render);
 
-// Add mouse element and mouse contraint to allow mouse controls
+// Add mouse element and mouse constraint to allow mouse controls
 var mouse = Mouse.create(render.canvas),
 	mouseConstraint = MouseConstraint.create(engine, {
 		mouse: mouse,
@@ -80,7 +80,7 @@ var boundsScaleTarget = 1,
 		y: 1
 	};
 
-// create and additional render proerty to track if the mouse is hovering over the canvas
+// create and additional render property to track if the mouse is hovering over the canvas
 render.canvas.addEventListener('mouseover', function() {
 	render.canvas.hoverOver = true;
 	//console.log(`Hover over: ${render.canvas.hoverOver}`)
@@ -183,7 +183,7 @@ Events.on(render, 'beforeRender', function () {
 		let direction = Vector.normalise(deltaCentre),
 			speed = Math.min(10, Math.pow(centreDist, 2) * 0.00001);
 
-		// Show so translatation direction and speed
+		// Show so translation direction and speed
 		render.context.fillText(`dir: ${direction.x}${direction.y},spd ${speed}`, mouse.absolute.x + 10, mouse.absolute.y + 10);
 
 		// Translate in direction at speed
@@ -227,7 +227,8 @@ Composite.add(world, [
 
 
 //create new PLAYER object
-// var player = new Player(400, 300, 25);
+//var player0 = new Player(400, 300, 25);
+//player0.body.label = 'player0';
 // console.log(player)
 
-var ship = new Ship(400, 300, 3, 50);
+var ship = new Ship(400, 300, 3, 25);

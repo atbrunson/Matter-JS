@@ -13,7 +13,7 @@
  *
  * @class
  * @example 
- * const player = new Player(100, 100, 50);
+ * const ship = new Ship(100, 100, 50);
  */
 
 class Ship {
@@ -23,25 +23,24 @@ class Ship {
 	 * @param {Number} y of initial location
 	 * @param {Number} height of new object
 	 * @param {Number} width will default to half the height
-	 * @param {{}} [options] will default with standard matter.js properies
+	 * @param {{}} [options] will default with standard matter.js properties
 	 */
 	constructor(x, y, sides, radius, options = {}) {
         
-        // build the ship from array of bodies
-        this.body = Bodies.polygon(x, y, sides, radius, { chamfer: { radius: radius / 6 } }),
+    // build the ship from array of bodies
+    this.body = Bodies.polygon(x, y, sides, radius, { chamfer: { radius: radius / 6 } }),
 
-		Matter.Body.setAngle(this.body, Math.PI/2);
-        Matter.Body.setCentre(this.body, { x: x, y: y+10 });
-        
-        Matter.World.add(engine.world, this.body);
+		//Matter.Body.setAngle(this.body, Math.PI/2);
+    Matter.Body.setCentre(this.body, { x: x+10, y: y });
+    Matter.World.add(engine.world, this.body);
 
-		// Setup the player controler
-		this.controler = new KeyboardControl();
-		this.controler.bindKey('w', () => this.thrust(0.01));
-		this.controler.bindKey('e', () => this.rotateRight(0.1), () => this.rotateLeft(0));
-		this.controler.bindKey('q', () => this.rotateLeft(0.1), () => this.rotateRight(0));
+		// Setup the player controller
+		this.controller = new KeyboardControl();
+		this.controller.bindKey('w', () => this.thrust(0.01));
+		this.controller.bindKey('e', () => this.rotateRight(0.1), () => this.rotateLeft(0));
+		this.controller.bindKey('q', () => this.rotateLeft(0.1), () => this.rotateRight(0));
 
-		this.controler.init();
+		this.controller.init();
 		console.log('Ship created at', x, y, 'with size', radius);
 		console.log(this);
 	
@@ -62,8 +61,10 @@ class Ship {
 	 * @description Moves the player up by setting its velocity.
 	 */
 	thrust(force) {
-		Matter.Body.applyForce(this.body, this.body.position, {x: 0, y: -force})
-        console.log(this.body.force)
+		Matter.Body.applyForce(this.body, this.body.position, {
+			x: force * Math.sin(this.body.angle - Math.PI / 2),
+			y: -force * Math.cos(this.body.angle - Math.PI / 2)
+		});
 	}
 
 	/** @method rotateLeft
@@ -119,8 +120,8 @@ class Ship {
 	 */
 	destroy() {
 		Matter.World.remove(engine.world, this.body);
-		this.controler.cleanup();
+		this.controller.cleanup();
 		this.body = null;
-		this.controler = null;
+		this.controller = null;
 	}
 }

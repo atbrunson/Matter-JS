@@ -31,16 +31,16 @@ class Player {
 		this.body.label = 'Player';
 		Matter.World.add(engine.world, this.body);
 
-		// Setup the player controler
-		this.controler = new KeyboardControl();
-		this.controler.bindKey('w', () => this.moveUp(5), () => this.stop());
-		this.controler.bindKey('a', () => this.moveLeft(5), () => this.stop());
-		this.controler.bindKey('s', () => this.moveDown(5), () => this.stop());
-		this.controler.bindKey('d', () => this.moveRight(5), () => this.stop());
-		this.controler.bindKey('e', () => this.rotateRight(0.1), () => this.rotateLeft(0));
-		this.controler.bindKey('q', () => this.rotateLeft(0.1), () => this.rotateRight(0));
+		// Setup the player controller
+		this.controller = new KeyboardControl();
+		this.controller.bindKey('w', () => this.moveUp(5), () => this.stop());
+		this.controller.bindKey('a', () => this.moveLeft(5), () => this.stop());
+		this.controller.bindKey('s', () => this.moveDown(5), () => this.stop());
+		this.controller.bindKey('d', () => this.moveRight(5), () => this.stop());
+		this.controller.bindKey('e', () => this.rotateRight(0.1), () => this.rotateLeft(0));
+		this.controller.bindKey('q', () => this.rotateLeft(0.1), () => this.rotateRight(0));
 
-		this.controler.init();
+		this.controller.init();
 		console.log('Player created at', x, y, 'with size', width, height);
 		console.log(this);
 	}
@@ -137,8 +137,8 @@ class Player {
 	 */
 	destroy() {
 		Matter.World.remove(engine.world, this.body);
-		this.controler.cleanup();
+		this.controller.cleanup();
 		this.body = null;
-		this.controler = null;
+		this.controller = null;
 	}
 }
