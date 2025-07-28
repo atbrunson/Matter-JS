@@ -25,14 +25,21 @@ class Ship {
 	 * @param {Number} width will default to half the height
 	 * @param {{}} [options] will default with standard matter.js properties
 	 */
-	constructor(x, y, sides, radius, options = {}) {
-        
-    // build the ship from array of bodies
-    this.body = Bodies.polygon(x, y, sides, radius, { chamfer: { radius: radius / 6 } }),
+	constructor(x, y, radius, options = {}) {
+
+		// build the ship from array of bodies
+		//this.body = Bodies.polygon(x, y, sides, radius, { chamfer: { radius: radius / 6 } }),
+		this.body = Bodies.fromVertices(x, y, [
+			{ x: x + radius, y: y - radius },
+			{ x: x - radius, y: y },
+			{ x: x + radius, y: y + radius },
+			{ x: x + 1.25 * radius, y: y-radius/10 },
+			{ x: x + 1.25 * radius, y: y+radius/10 },
+		]);
 
 		//Matter.Body.setAngle(this.body, Math.PI/2);
-    Matter.Body.setCentre(this.body, { x: x+10, y: y });
-    Matter.World.add(engine.world, this.body);
+		Matter.Body.setCentre(this.body, { x: x + .5 *radius, y: y });
+		Matter.World.add(engine.world, this.body);
 
 		// Setup the player controller
 		this.controller = new KeyboardControl();
@@ -43,8 +50,8 @@ class Ship {
 		this.controller.init();
 		console.log('Ship created at', x, y, 'with size', radius);
 		console.log(this);
-	
-    }
+
+	}
 
 	/**
 	 * @method follow
@@ -72,14 +79,14 @@ class Ship {
 	*/
 	rotateLeft(rotation) {
 		Matter.Body.setAngularVelocity(this.body, -rotation)
-        console.log(`Rotating right by ${this.body.angle}`)
+		console.log(`Rotating right by ${this.body.angle}`)
 	}
 	/** @method rotateRight
 	 * @param {Number} rotation - The amount to rotate the player right.
 	*/
 	rotateRight(rotation) {
 		Matter.Body.setAngularVelocity(this.body, rotation);
-        console.log(`Rotating right by ${this.body.angle}`)
+		console.log(`Rotating right by ${this.body.angle}`)
 	}
 
 	/**
@@ -87,7 +94,7 @@ class Ship {
 	 * @description reverses the velocity of the player, effectively stopping it.
 	 */
 	stop() {
-		while (this.body.speed >= 0.1){
+		while (this.body.speed >= 0.1) {
 			Matter.Body.setVelocity(this.body, {
 				x: 0,
 				y: 0

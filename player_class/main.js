@@ -231,4 +231,4 @@ Composite.add(world, [
 //player0.body.label = 'player0';
 // console.log(player)
 
-var ship = new Ship(400, 300, 3, 25);
+var ship = new Ship(400, 300, 12.5);
