@@ -43,13 +43,17 @@ class Ship {
 
 		// Setup the player controller
 		this.controller = new KeyboardControl();
-		this.controller.bindKey('w', () => this.thrust(0.01));
-		this.controller.bindKey('e', () => this.rotateRight(0.1), () => this.rotateLeft(0));
-		this.controller.bindKey('q', () => this.rotateLeft(0.1), () => this.rotateRight(0));
+		this.controller.bindKey('w', () => this.forward(0.01));
+		this.controller.bindKey('a', () => this.portward(0.005));
+		this.controller.bindKey('s', () => this.aftward(0.0025));
+		this.controller.bindKey('d', () => this.starward(0.005));
+		this.controller.bindKey('e', () => this.rotateRight(0.05), () => this.rotateLeft(0));
+		this.controller.bindKey('q', () => this.rotateLeft(0.05), () => this.rotateRight(0));
 
 		this.controller.init();
 		console.log('Ship created at', x, y, 'with size', radius);
 		console.log(this);
+
 
 	}
 
@@ -67,12 +71,33 @@ class Ship {
 	 * @param {Number} force - The speed at which the player moves up.
 	 * @description Moves the player up by setting its velocity.
 	 */
-	thrust(force) {
+	forward(force) {
 		Matter.Body.applyForce(this.body, this.body.position, {
 			x: force * Math.sin(this.body.angle - Math.PI / 2),
 			y: -force * Math.cos(this.body.angle - Math.PI / 2)
 		});
-	}
+	};
+
+	aftward(force) {
+		Matter.Body.applyForce(this.body, this.body.position, {
+			x: -force * Math.sin(this.body.angle - Math.PI / 2),
+			y: force * Math.cos(this.body.angle - Math.PI / 2)
+		});
+	};
+
+	portward(force) {
+		Matter.Body.applyForce(this.body, this.body.position, {
+			x: -force * Math.cos(this.body.angle - Math.PI / 2),
+			y: -force * Math.sin(this.body.angle - Math.PI / 2)
+		});
+	};
+
+	starward(force) {
+		Matter.Body.applyForce(this.body, this.body.position, {	
+			x: force * Math.cos(this.body.angle - Math.PI / 2),
+			y: force * Math.sin(this.body.angle - Math.PI / 2)
+		});	
+	};
 
 	/** @method rotateLeft
 	 * @param {Number} rotation - The amount to rotate the player left.
