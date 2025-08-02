@@ -231,9 +231,15 @@ Composite.add(world, [
 //player0.body.label = 'player0';
 // console.log(player)
 
-var ship = new Ship(
-	400, 	// initial x position
-	300, 	// initial y position
-	10 	// radius
-);
-document.onclose = function() {ship.destroy()};
+// var ship = new Ship(
+// 	400, 	// initial x position
+// 	300, 	// initial y position
+// 	10 	// radius
+// );
+
+var player = new Player(400, 300, 100)
+
+document.onclose = function() {
+	// ship.destroy()
+	player.kill()
+};
