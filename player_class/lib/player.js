@@ -33,18 +33,21 @@ class Player {
 			...options
 		});
 
-		// Example: Add a "head" as a circle on top of the rectangle
+		// Add a "head" as a circle on top of the rectangle
 		this.head = Bodies.circle(x, y - (width / .80), width / 2, {
 			isSensor: true,
 			label: 'PlayerHead'
 		});
 
-		// Example: Add a "foot" as a circle at the bottom
+		// Add a "foot" as a rectangle at the bottom
 		this.foot = Bodies.rectangle(x, y + height * 0.85, width / 1.5, height / 1.5, {
 			chamfer: { radius: width / 4 },
 			isSensor: true,
 			label: 'PlayerFoot'
 		});
+
+		// Add an "arm" as a rectangle in the middle
+
 
 		// Create a constraint (neck joint) between mainBody and head
 		this.neckJoint = Constraint.create({
@@ -56,6 +59,7 @@ class Player {
 			stiffness: 1,
 			length: 0,
 			render: { strokeStyle: "#ff00ff" }
+			// set limit to angle of motion
 		});
 
 		// Create a constraint (hip joint) between mainBody and head
@@ -68,6 +72,7 @@ class Player {
 			stiffness: 1,
 			length: 0,
 			render: { strokeStyle: "#ff00ff" }
+			// set limit to angle of motion
 		});
 
 		// Create a composite containing all parts
@@ -89,7 +94,6 @@ class Player {
 		this.controller.init();
 
 		console.log('Player created at', x, y, 'with size', width, height);
-
 		console.log(this);
 	}
 
@@ -154,7 +158,7 @@ class Player {
 	stop() {
 		Matter.Body.setVelocity(this.mainBody, { x: 0, y: 0 });
 		// Log the speed for debugging purposes
-		console.log(`player speed: ${this.mainBody.speed}`);
+		// console.log(`player speed: ${this.mainBody.speed}`);
 	}
 	/**
 	* @method jump

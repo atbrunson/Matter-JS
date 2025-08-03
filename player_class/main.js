@@ -97,12 +97,7 @@ render.canvas.addEventListener('mouseout', function() {
 let wheelCounter = 0
 
 render.canvas.addEventListener('wheel', function() {
-console.log(`
-
-	matter wheel: ${mouse.wheelDelta}
-	wheelcounter: ${wheelCounter}
-
-	`)
+// console.log(`matter wheel: ${mouse.wheelDelta} | wheelcounter: ${wheelCounter}`)
 })
 //logs keyup events
 document.addEventListener('keyup', function(event) {
@@ -127,7 +122,7 @@ Events.on(render, 'beforeRender', function () {
 		if ((scaleFactor < 0 && boundsScale.x >= 0.6) || (scaleFactor > 0 && boundsScale.x <= 1.4)) {
 			boundsScaleTarget += scaleFactor;
 		}
-		console.log(`scaleFactor: ${scaleFactor}, boundsScaleTarget: ${boundsScaleTarget}`);
+		// console.log(`scaleFactor: ${scaleFactor} | boundsScaleTarget: ${boundsScaleTarget}`);
 	}
 
 	// if scale has changed
