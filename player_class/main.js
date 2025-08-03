@@ -71,7 +71,7 @@ var viewportCentre = {
 // create limits for the viewport
 var extents = {
 	min: { x: -100, y: -100 },
-	max: { x: render.canvas.width + 100, y: render.canvas.height + 100 }
+	max: { x: render.canvas.width + 25, y: render.canvas.height + 25 }
 };
 
 // keep track of current bounds scale (view zoom)
@@ -230,7 +230,9 @@ Composite.add(world, [
 // 	10 	// radius
 // );
 
-var player = new Player(400, 300, 100)
+var player = new Player(400, 300, 25)
+player.update()
+
 
 document.onclose = function() {
 	// ship.destroy()

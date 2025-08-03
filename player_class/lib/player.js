@@ -58,7 +58,7 @@ class Player {
 			label: 'neckJoint',
 			stiffness: 1,
 			length: 0,
-			render: { strokeStyle: "#ff00ff" },
+			render: { visible: false, strokeStyle: "#ff00ff" },
 			angularStiffness: 0.95
 			
 			// set limit to angle of motion
@@ -73,7 +73,7 @@ class Player {
 			label: 'hipJoint',
 			stiffness: 1,
 			length: 0,
-			render: { strokeStyle: "#ff00ff" },
+			render: { visible: false , strokeStyle: "#ff00ff" },
 			angularStiffness: 0.90
 			// set limit to angle of motion
 		});
