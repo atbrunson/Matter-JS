@@ -62,28 +62,23 @@ class Ship {
 	 * @description Initializes ship by calculating thruster positions & summing up the thrust forces in each direction.
 	 */
 	assemble() {
-		// Check for thrusters
-		// for (thruster in thrusters){
-		// 	this.thrust += thruster.vector 
-		// }
-		// Check for storage modules
-		// Check for production modules
-		// Check for 
+	/*
+		Check for thrusters
+		for (thruster in thrusters){
+			this.thrust += thruster.vector 
+		}
+		Check for storage modules
+		Check for production modules
+		Check for 
 		
-		// Check for minimum ship systems:
-		// - (1) Thruster
-		// - (1) life support
-		// - (1) control module
-		// Matter.Composite.add(module || component)
-		// Matter.Constraint.create(this.body , module.body, CONSTRAINT_TYPE)
-
-	
+		Check for minimum ship systems:
+		- (1) Thruster
+		- (1) life support
+		- (1) control module
+		Matter.Composite.add(module || component)
+		Matter.Constraint.create(this.body , module.body, CONSTRAINT_TYPE)
+	*/
 	}
-
-
-
-	}
-
 
 
 	/**

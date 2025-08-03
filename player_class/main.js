@@ -7,6 +7,7 @@ var Engine = Matter.Engine,
 	Events = Matter.Events,
 	Composite = Matter.Composite,
 	Composites = Matter.Composites,
+	Constraint = Matter.Constraint,
 	Body = Matter.Body,
 	Bodies = Matter.Bodies,
 	Common = Matter.Common,
@@ -105,7 +106,7 @@ console.log(`
 })
 //logs keyup events
 document.addEventListener('keyup', function(event) {
-	console.log(`keyup: ${event.key}`);
+	// console.log(`keyup: ${event.key}`);
 	} 
 )
 

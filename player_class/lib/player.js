@@ -6,7 +6,6 @@
  * @description This module defines a Player class that can be controlled via keyboard inputs in a Matter 
  */
 
-
 /**
  * Class representing a Player in the Matter.js world.
  * The Player can be controlled via keyboard inputs and interacts with the physics engine.
@@ -15,7 +14,6 @@
  * @example 
  * const player = new Player(100, 100, 50);
  */
-
 
 class Player {
 	/**
@@ -27,37 +25,55 @@ class Player {
 	 * @param {{}} [options] will default with standard matter.js properties
 	 */
 	constructor(x, y, height, width = height / 2, options = {}) {
-		
+
 		// Create the main player body
-		const mainBody = Bodies.rectangle(x, y, width, height, {
+		this.mainBody = Bodies.rectangle(x, y, width, height, {
 			chamfer: { radius: width / 2.2 },
-			render: {opacity: 0}
+			label: 'MainBody',
+			...options
 		});
 
 		// Example: Add a "head" as a circle on top of the rectangle
-		const head = Bodies.circle(x, y - height * 1.1, width * 0.9, {
+		this.head = Bodies.circle(x, y - (width / .80), width / 2, {
 			isSensor: true,
 			label: 'PlayerHead'
 		});
 
 		// Example: Add a "foot" as a circle at the bottom
-		const foot = Bodies.circle(x, y + height, width / 3, {
+		this.foot = Bodies.rectangle(x, y + height * 0.85, width / 1.5, height / 1.5, {
+			chamfer: { radius: width / 4 },
 			isSensor: true,
 			label: 'PlayerFoot'
 		});
 
+		// Create a constraint (neck joint) between mainBody and head
+		this.neckJoint = Constraint.create({
+			bodyA: this.mainBody,
+			pointA: { x: 0, y: -height / 2 },
+			bodyB: this.head,
+			pointB: { x: 0, y: width / 2 },
+			label: 'neckJoint',
+			stiffness: 1,
+			length: 0,
+			render: { strokeStyle: "#ff00ff" }
+		});
+
+		// Create a constraint (hip joint) between mainBody and head
+		this.hipJoint = Constraint.create({
+			bodyA: this.mainBody,
+			pointA: { x: 0, y: height / 2 },
+			bodyB: this.foot,
+			pointB: { x: 0, y: - width / 2 },
+			label: 'hipJoint',
+			stiffness: 1,
+			length: 0,
+			render: { strokeStyle: "#ff00ff" }
+		});
+
 		// Create a composite containing all parts
 		this.body = Composite.create({ label: 'PlayerComposite' });
-		Composite.add(this.body, [mainBody, head, foot]);
-
+		Composite.add(this.body, [this.mainBody, this.head, this.foot, this.neckJoint, this.hipJoint]);
 		// Optionally, you can store references to the parts if needed
-		this.mainBody = mainBody;
-		this.head = head;
-		this.foot = foot;
-		this.body = Matter.Bodies.rectangle(x, y, width, height,
-			{ chamfer: { radius: width / 2.2 } });
-		
-		this.body.label = 'Player';
 
 		Matter.World.add(engine.world, this.body);
 
@@ -91,7 +107,7 @@ class Player {
 	 * @description Moves the player up by setting its velocity.
 	 */
 	moveUp(speed) {
-		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: -speed });
+		Matter.Body.setVelocity(this.mainBody, { x: this.mainBody.velocity.x, y: -speed });
 	}
 	/**
 	 * @method moveLeft
@@ -99,7 +115,7 @@ class Player {
 	 * @description Moves the player left by setting its velocity.
 	 */
 	moveLeft(speed) {
-		Matter.Body.setVelocity(this.body, { x: -speed, y: this.body.velocity.y });
+		Matter.Body.setVelocity(this.mainBody, { x: -speed, y: this.mainBody.velocity.y });
 	}
 	/**
 	 * @method moveDown
@@ -107,7 +123,7 @@ class Player {
 	 * @description Moves the player down by setting its velocity.
 	 */
 	moveDown(speed) {
-		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: speed });
+		Matter.Body.setVelocity(this.mainBody, { x: this.mainBody.velocity.x, y: speed });
 	}
 	/**
 	 * @method moveRight
@@ -115,20 +131,20 @@ class Player {
 	 * @description Moves the player right by setting its velocity.
 	 */
 	moveRight(speed) {
-		Matter.Body.setVelocity(this.body, { x: speed, y: this.body.velocity.y });
+		Matter.Body.setVelocity(this.mainBody, { x: speed, y: this.mainBody.velocity.y });
 	}
 
 	/** @method rotateLeft
 	 * @param {Number} rotation - The amount to rotate the player left.
 	*/
 	rotateLeft(rotation) {
-		Matter.Body.setAngularVelocity(this.body, -rotation)
+		Matter.Body.setAngularVelocity(this.mainBody, -rotation)
 	}
 	/** @method rotateRight
 	 * @param {Number} rotation - The amount to rotate the player right.
 	*/
 	rotateRight(rotation) {
-		Matter.Body.setAngularVelocity(this.body, rotation)
+		Matter.Body.setAngularVelocity(this.mainBody, rotation)
 	}
 
 	/**
@@ -136,36 +152,26 @@ class Player {
 	 * @description reverses the velocity of the player, effectively stopping it.
 	 */
 	stop() {
-		while (this.body.speed >= 0.1){
-			Matter.Body.setVelocity(this.body, {
-				x: 0,
-				y: 0
-			});
-			// Log the speed for debugging purposes
-			console.log(`player speed: ${this.body.speed}`);
-		}
+		Matter.Body.setVelocity(this.mainBody, { x: 0, y: 0 });
+		// Log the speed for debugging purposes
+		console.log(`player speed: ${this.mainBody.speed}`);
 	}
 	/**
-	 * @method jump
-	 * @param {Number} force - The force applied to the player to make it jump.
-	 * @description Applies a force to the player to make it jump.
-	 */
+	* @method jump
+	* @param {Number} force - The force applied to the player to make it jump.
+	* @description Applies a force to the player to make it jump.
+	*/
 	jump(force) {
-		Matter.Body.applyForce(this.body, this.body.position, { x: 0, y: -force });
+		Matter.Body.applyForce(this.mainBody, this.mainBody.position, { x: 0, y: -force });
 	}
 
-	/**
-	 * @method update
-	 * @description Updates the player state. This can be used to implement additional logic such as animations or physics interactions.
-	 * @todo: Implement player state updates, such as animations or physics interactions.
-	 */
 	update() {
 		// Additional logic to update player state
 	}
 
 	/**
-	 * @method destroy
-	 * @description Removes the player from the world and cleans up resources.
+	 * @method kill
+	 * @description Removes the player from the world and frees up resources.
 	 */
 	kill() {
 		Matter.World.remove(engine.world, this.body);
