@@ -30,13 +30,13 @@ class Player {
 		this.mainBody = Bodies.rectangle(x, y, width, height, {
 			chamfer: { radius: width / 2.2 },
 			label: 'MainBody',
-			...options
 		});
 
 		// Add a "head" as a circle on top of the rectangle
 		this.head = Bodies.circle(x, y - (width / .80), width / 2, {
 			isSensor: true,
-			label: 'PlayerHead'
+			label: 'PlayerHead',
+				
 		});
 
 		// Add a "foot" as a rectangle at the bottom
@@ -58,7 +58,9 @@ class Player {
 			label: 'neckJoint',
 			stiffness: 1,
 			length: 0,
-			render: { strokeStyle: "#ff00ff" }
+			render: { strokeStyle: "#ff00ff" },
+			angularStiffness: 0.95
+			
 			// set limit to angle of motion
 		});
 
@@ -71,7 +73,8 @@ class Player {
 			label: 'hipJoint',
 			stiffness: 1,
 			length: 0,
-			render: { strokeStyle: "#ff00ff" }
+			render: { strokeStyle: "#ff00ff" },
+			angularStiffness: 0.90
 			// set limit to angle of motion
 		});
 

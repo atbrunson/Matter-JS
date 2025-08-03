@@ -12,10 +12,7 @@
 class Module {
 	constructor(component , process) {
 
-	
-
-	
-	
+		
 	}
 }
 		

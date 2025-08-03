@@ -9,8 +9,4 @@ class Component{
 		Matter.Body.create(...dimensions)
 	}
 
-		
-
-
-
 }
