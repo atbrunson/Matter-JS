@@ -91,9 +91,6 @@ render.canvas.addEventListener('mouseout', function() {
 	//console.log(`Hover over: ${render.canvas.hoverOver}`)
 });
 
-
-
-
 let wheelCounter = 0
 
 render.canvas.addEventListener('wheel', function() {
@@ -239,3 +236,4 @@ document.onclose = function() {
 	// ship.destroy()
 	player.kill()
 };
+console.log(engine)

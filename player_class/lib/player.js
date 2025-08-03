@@ -173,7 +173,11 @@ class Player {
 	}
 
 	update() {
+	
+	
 		// Additional logic to update player state
+	
+	
 	}
 
 	/**
