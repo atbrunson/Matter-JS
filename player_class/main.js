@@ -96,18 +96,18 @@ render.canvas.addEventListener('mouseout', function() {
 let wheelCounter = 0
 
 render.canvas.addEventListener('wheel', function() {
-console.log(`
+// console.log(`
 
-	matter wheel: ${mouse.wheelDelta}
-	wheelcounter: ${wheelCounter}
+// 	matter wheel: ${mouse.wheelDelta}
+// 	wheelcounter: ${wheelCounter}
 
-	`)
+// 	`)
 })
 //logs keyup events
-document.addEventListener('keyup', function(event) {
-	console.log(`keyup: ${event.key}`);
-	} 
-)
+// document.addEventListener('keyup', function(event) {
+// 	console.log(`keyup: ${ship.body.fuel}`);
+// 	} 
+// )
 
 
 
@@ -232,3 +232,10 @@ Composite.add(world, [
 // console.log(player)
 
 var ship = new Ship(400, 300, 12.5);
+
+if (ship.body.fuel > 0) {
+	ship.update();
+}
+
+
+console.log(`Fuel remaining: ${ship.body.fuel}`)

@@ -33,12 +33,14 @@ class Ship {
 			{ x: x + radius, y: y - radius },
 			{ x: x - radius, y: y },
 			{ x: x + radius, y: y + radius },
-			{ x: x + 1.25 * radius, y: y-radius/10 },
-			{ x: x + 1.25 * radius, y: y+radius/10 },
+			{ x: x + 1.25 * radius, y: y - radius / 10 },
+			{ x: x + 1.25 * radius, y: y + radius / 10 },
 		]);
+		this.body.fuel = radius
+		Matter.Body.setMass(this.body, this.body.fuel + radius * 0.1);
+		Matter.Body.setCentre(this.body, { x: x + .5 * radius, y: y });
 
 		//Matter.Body.setAngle(this.body, Math.PI/2);
-		Matter.Body.setCentre(this.body, { x: x + .5 *radius, y: y });
 		Matter.World.add(engine.world, this.body);
 
 		// Setup the player controller
@@ -49,7 +51,7 @@ class Ship {
 		this.controller.bindKey('d', () => this.starward(0.005));
 		this.controller.bindKey('e', () => this.rotateRight(0.05), () => this.rotateLeft(0));
 		this.controller.bindKey('q', () => this.rotateLeft(0.05), () => this.rotateRight(0));
-
+		
 		this.controller.init();
 		console.log('Ship created at', x, y, 'with size', radius);
 		console.log(this);
@@ -76,6 +78,7 @@ class Ship {
 			x: force * Math.sin(this.body.angle - Math.PI / 2),
 			y: -force * Math.cos(this.body.angle - Math.PI / 2)
 		});
+		this.body.fuel -= 0.01; // Decrease fuel on thrust
 	};
 
 	aftward(force) {
@@ -83,6 +86,7 @@ class Ship {
 			x: -force * Math.sin(this.body.angle - Math.PI / 2),
 			y: force * Math.cos(this.body.angle - Math.PI / 2)
 		});
+	this.body.fuel -= 0.01; // Decrease fuel on thrust
 	};
 
 	portward(force) {
@@ -90,13 +94,15 @@ class Ship {
 			x: -force * Math.cos(this.body.angle - Math.PI / 2),
 			y: -force * Math.sin(this.body.angle - Math.PI / 2)
 		});
+		this.body.fuel -= 0.01; // Decrease fuel on thrust
 	};
 
 	starward(force) {
-		Matter.Body.applyForce(this.body, this.body.position, {	
+		Matter.Body.applyForce(this.body, this.body.position, {
 			x: force * Math.cos(this.body.angle - Math.PI / 2),
 			y: force * Math.sin(this.body.angle - Math.PI / 2)
-		});	
+		});
+		this.body.fuel -= 0.01; // Decrease fuel on thrust
 	};
 
 	/** @method rotateLeft
@@ -104,14 +110,14 @@ class Ship {
 	*/
 	rotateLeft(rotation) {
 		Matter.Body.setAngularVelocity(this.body, -rotation)
-		console.log(`Rotating right by ${this.body.angle}`)
+		//console.log(`Rotating right by ${this.body.angle}`)
 	}
 	/** @method rotateRight
 	 * @param {Number} rotation - The amount to rotate the player right.
 	*/
 	rotateRight(rotation) {
 		Matter.Body.setAngularVelocity(this.body, rotation);
-		console.log(`Rotating right by ${this.body.angle}`)
+		//console.log(`Rotating right by ${this.body.angle}`)
 	}
 
 	/**
@@ -143,7 +149,20 @@ class Ship {
 	 * @todo: Implement player state updates, such as animations or physics interactions.
 	 */
 	update() {
+		if (this.body.speed != 0) {
+			this.body.fuel -= 0.1; // Decrease fuel based on speed
+			if (this.body.fuel < 0) {
+				this.body.fuel = 0; // Prevent negative fuel
+			}
+		}
+		
+		
 		// Additional logic to update player state
+
+		/**
+		 * update mass based on fuel consumption
+		 */
+		
 	}
 
 	/**
