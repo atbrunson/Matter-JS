@@ -16,6 +16,7 @@
  * const player = new Player(100, 100, 50);
  */
 
+
 class Player {
 	/**
 	 * @constructs Player object
@@ -26,9 +27,38 @@ class Player {
 	 * @param {{}} [options] will default with standard matter.js properties
 	 */
 	constructor(x, y, height, width = height / 2, options = {}) {
+		
+		// Create the main player body
+		const mainBody = Bodies.rectangle(x, y, width, height, {
+			chamfer: { radius: width / 2.2 },
+			render: {opacity: 0}
+		});
 
-		this.body = Matter.Bodies.rectangle(x, y, width, height, { chamfer: { radius: width / 2.2 } });
+		// Example: Add a "head" as a circle on top of the rectangle
+		const head = Bodies.circle(x, y - height * 1.1, width * 0.9, {
+			isSensor: true,
+			label: 'PlayerHead'
+		});
+
+		// Example: Add a "foot" as a circle at the bottom
+		const foot = Bodies.circle(x, y + height, width / 3, {
+			isSensor: true,
+			label: 'PlayerFoot'
+		});
+
+		// Create a composite containing all parts
+		this.body = Composite.create({ label: 'PlayerComposite' });
+		Composite.add(this.body, [mainBody, head, foot]);
+
+		// Optionally, you can store references to the parts if needed
+		this.mainBody = mainBody;
+		this.head = head;
+		this.foot = foot;
+		this.body = Matter.Bodies.rectangle(x, y, width, height,
+			{ chamfer: { radius: width / 2.2 } });
+		
 		this.body.label = 'Player';
+
 		Matter.World.add(engine.world, this.body);
 
 		// Setup the player controller
@@ -41,7 +71,9 @@ class Player {
 		this.controller.bindKey('q', () => this.rotateLeft(0.1), () => this.rotateRight(0));
 
 		this.controller.init();
+
 		console.log('Player created at', x, y, 'with size', width, height);
+
 		console.log(this);
 	}
 
@@ -135,7 +167,7 @@ class Player {
 	 * @method destroy
 	 * @description Removes the player from the world and cleans up resources.
 	 */
-	destroy() {
+	kill() {
 		Matter.World.remove(engine.world, this.body);
 		this.controller.cleanup();
 		this.body = null;

@@ -36,11 +36,12 @@ class Ship {
 			{ x: x + 1.25 * radius, y: y - radius / 10 },
 			{ x: x + 1.25 * radius, y: y + radius / 10 },
 		]);
-		this.body.fuel = radius
+		this.body.fuel = radius * 0.05
 		Matter.Body.setMass(this.body, this.body.fuel + radius * 0.1);
 		Matter.Body.setCentre(this.body, { x: x + .5 * radius, y: y });
 
-		//Matter.Body.setAngle(this.body, Math.PI/2);
+
+
 		Matter.World.add(engine.world, this.body);
 
 		// Setup the player controller
@@ -56,8 +57,35 @@ class Ship {
 		console.log('Ship created at', x, y, 'with size', radius);
 		console.log(this);
 
+	}
+	/**
+	 * @method assemble
+	 * @description Initializes ship by calculating thruster positions & summing up the thrust forces in each direction.
+	 */
+	assemble() {
+		// Check for thrusters
+		// for (thruster in thrusters){
+		// 	this.thrust += thruster.vector 
+		// }
+		// Check for storage modules
+		// Check for production modules
+		// Check for 
+		
+		// Check for minimum ship systems:
+		// - (1) Thruster
+		// - (1) life support
+		// - (1) control module
+		// Matter.Composite.add(module || component)
+		// Matter.Constraint.create(this.body , module.body, CONSTRAINT_TYPE)
+
+	
+	}
+
+
 
 	}
+
+
 
 	/**
 	 * @method follow
@@ -66,7 +94,7 @@ class Ship {
 	 */
 	follow() {
 		// Needs viewPoint logic
-	}
+		}
 
 	/**
 	 * @method thrust
@@ -78,7 +106,9 @@ class Ship {
 			x: force * Math.sin(this.body.angle - Math.PI / 2),
 			y: -force * Math.cos(this.body.angle - Math.PI / 2)
 		});
-		this.body.fuel -= 0.01; // Decrease fuel on thrust
+		
+		this.body.fuel -= force * 0.1; // Decrease fuel based on thrust
+
 	};
 
 	aftward(force) {
@@ -134,13 +164,10 @@ class Ship {
 			console.log(`player speed: ${this.body.speed}`);
 		}
 	}
-	/**
-	 * @method jump
-	 * @param {Number} force - The force applied to the player to make it jump.
-	 * @description Applies a force to the player to make it jump.
-	 */
-	jump(force) {
-		Matter.Body.applyForce(this.body, this.body.position, { x: 0, y: -force });
+
+	thrust(direction) {
+		// Apply force in the direction of the thruster
+		// track fuel consumption
 	}
 
 	/**
