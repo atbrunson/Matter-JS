@@ -27,38 +27,34 @@ class Player {
 	 * @param {{}} [options] will default with standard matter.js properties
 	 */
 	constructor(x, y, height, width = height / 2, options = {}) {
+				
+		// Create Player composite body
+		this.body = Composite.create({ label: 'PlayerComposite' });
 		
 		// Create the main player body
-		const mainBody = Bodies.rectangle(x, y, width, height, {
-			chamfer: { radius: width / 2.2 },
-			render: {opacity: 0}
+		this.mainBody = Bodies.rectangle(x, y, width, height, {
+			chamfer: { radius: width / 2 },
+			render: {opacity: 1}
 		});
 
 		// Example: Add a "head" as a circle on top of the rectangle
-		const head = Bodies.circle(x, y - height * 1.1, width * 0.9, {
+		this.head = Bodies.rectangle(x, y - height / 1.5, width, height/2, {
+			chamfer: { radius: width/2 },
 			isSensor: true,
 			label: 'PlayerHead'
 		});
 
 		// Example: Add a "foot" as a circle at the bottom
-		const foot = Bodies.circle(x, y + height, width / 3, {
+		this.foot =Bodies.rectangle(x, y + height/1.5, width , height/1.5, {
+			chamfer: { radius: width/2 },
 			isSensor: true,
 			label: 'PlayerFoot'
 		});
 
-		// Create a composite containing all parts
-		this.body = Composite.create({ label: 'PlayerComposite' });
-		Composite.add(this.body, [mainBody, head, foot]);
-
-		// Optionally, you can store references to the parts if needed
-		this.mainBody = mainBody;
-		this.head = head;
-		this.foot = foot;
-		this.body = Matter.Bodies.rectangle(x, y, width, height,
-			{ chamfer: { radius: width / 2.2 } });
-		
-		this.body.label = 'Player';
-
+		// add all parts to composite
+		Composite.add(this.body, [this.mainBody, this.head, this.foot]);
+	
+	
 		Matter.World.add(engine.world, this.body);
 
 		// Setup the player controller
@@ -91,7 +87,7 @@ class Player {
 	 * @description Moves the player up by setting its velocity.
 	 */
 	moveUp(speed) {
-		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: -speed });
+		Matter.Body.setVelocity(this.mainBody, { x: this.mainBody.velocity.x, y: -speed });
 	}
 	/**
 	 * @method moveLeft
@@ -99,7 +95,7 @@ class Player {
 	 * @description Moves the player left by setting its velocity.
 	 */
 	moveLeft(speed) {
-		Matter.Body.setVelocity(this.body, { x: -speed, y: this.body.velocity.y });
+		Matter.Body.setVelocity(this.mainBody, { x: -speed, y: this.mainBody.velocity.y });
 	}
 	/**
 	 * @method moveDown
@@ -107,7 +103,7 @@ class Player {
 	 * @description Moves the player down by setting its velocity.
 	 */
 	moveDown(speed) {
-		Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: speed });
+		Matter.Body.setVelocity(this.mainBody, { x: this.mainBody.velocity.x, y: speed });
 	}
 	/**
 	 * @method moveRight
@@ -115,20 +111,20 @@ class Player {
 	 * @description Moves the player right by setting its velocity.
 	 */
 	moveRight(speed) {
-		Matter.Body.setVelocity(this.body, { x: speed, y: this.body.velocity.y });
+		Matter.Body.setVelocity(this.mainBody, { x: speed, y: this.mainBody.velocity.y });
 	}
 
 	/** @method rotateLeft
 	 * @param {Number} rotation - The amount to rotate the player left.
 	*/
 	rotateLeft(rotation) {
-		Matter.Body.setAngularVelocity(this.body, -rotation)
+		Matter.Body.setAngularVelocity(this.mainBody, -rotation)
 	}
 	/** @method rotateRight
 	 * @param {Number} rotation - The amount to rotate the player right.
 	*/
 	rotateRight(rotation) {
-		Matter.Body.setAngularVelocity(this.body, rotation)
+		Matter.Body.setAngularVelocity(this.mainBody, rotation)
 	}
 
 	/**

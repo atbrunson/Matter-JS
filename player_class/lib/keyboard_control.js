@@ -8,6 +8,7 @@
  * keyboard.bindKey('ArrowUp', () => moveUp());
  *
  * @property {Object} keyBindings - An object mapping key names to their corresponding action callbacks.
+ * @property {Map} activeKeys - An array of currently ai
  * @method bindKey - Binds a specific key to an action callback.
  * @method unbindKey - Removes the binding for a specific key.
  * @method handleKeyDown - Handles the keydown event and triggers the bound action.
@@ -18,6 +19,7 @@
 class KeyboardControl {
     constructor() {
         this.keyBindings = {};
+        this.acitveKeys = new Map
         this.init();
     }
     /**
@@ -56,9 +58,11 @@ class KeyboardControl {
      */
     handleKeyDown(event) {
         const action = this.keyBindings[event.key];
+        this.acitveKeys.set(event.key)
         if (action) {
             action(event);
         }
+        //console.log(this)
     }
     /**
      * Handles the keyup event. This can be used to stop actions or reset states.
@@ -66,9 +70,11 @@ class KeyboardControl {
      */ 
     handleKeyUp(event) {
         const cancel = this.keyBindings[event.key+ "Up"];
+        this.acitveKeys.delete(event.key)
         if (cancel) {
             cancel(event);
         } 
+        //console.log(this)
     }
     /**
      * Destroys the keyboard control, cleaning up resources and event listeners.

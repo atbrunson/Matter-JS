@@ -7,6 +7,7 @@ var Engine = Matter.Engine,
 	Events = Matter.Events,
 	Composite = Matter.Composite,
 	Composites = Matter.Composites,
+	Constraint = Matter.Constraint,
 	Body = Matter.Body,
 	Bodies = Matter.Bodies,
 	Common = Matter.Common,
@@ -21,7 +22,7 @@ var engine = Engine.create(),
 	world = engine.world;
 
 // Set WORLD Properties
-world.gravity.scale = 0.0
+engine.gravity.scale = 0.0
 
 // Create & start the RUNNER
 var runner = Runner.create();
@@ -36,7 +37,7 @@ var render = Render.create({
 		width: 800,
 		height: 600,
 		hasBounds: true,
-		wireframes: false,
+		wireframes: true,
 		showAngleIndicator: true,
 		showCollisions: false,
 		showVelocity: true,
@@ -231,15 +232,14 @@ Composite.add(world, [
 //player0.body.label = 'player0';
 // console.log(player)
 
-// var ship = new Ship(
-// 	400, 	// initial x position
-// 	300, 	// initial y position
-// 	10 	// radius
-// );
+var ship = new Ship(
+	400, 	// initial x position
+	300, 	// initial y position
+	15 		// radius
+);
 
-var player = new Player(400, 300, 100)
-
-document.onclose = function() {
-	// ship.destroy()
-	player.kill()
-};
+// var player = new Player(400, 300, 100)
+// document.onclose = function() {
+// 	// ship.destroy()
+// 	player.kill()
+// };
