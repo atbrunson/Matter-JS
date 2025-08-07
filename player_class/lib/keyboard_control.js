@@ -19,7 +19,7 @@
 class KeyboardControl {
     constructor() {
         this.keyBindings = {};
-        this.acitveKeys = new Map
+        this.acitveKeys = new Set
         this.init();
     }
     /**
@@ -57,24 +57,24 @@ class KeyboardControl {
      * @param {KeyboardEvent} event - The keyboard event object.
      */
     handleKeyDown(event) {
+        this.acitveKeys.add(event.key)
         const action = this.keyBindings[event.key];
-        this.acitveKeys.set(event.key)
         if (action) {
             action(event);
         }
-        //console.log(this)
+        // console.log(this)
     }
     /**
      * Handles the keyup event. This can be used to stop actions or reset states.
      * @param {KeyboardEvent} event - The keyboard event object.
      */ 
     handleKeyUp(event) {
-        const cancel = this.keyBindings[event.key+ "Up"];
         this.acitveKeys.delete(event.key)
+        const cancel = this.keyBindings[event.key+ "Up"];
         if (cancel) {
             cancel(event);
         } 
-        //console.log(this)
+        // console.log(this)
     }
     /**
      * Destroys the keyboard control, cleaning up resources and event listeners.

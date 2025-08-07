@@ -71,6 +71,13 @@ class Player {
 		console.log('Player created at', x, y, 'with size', width, height);
 
 		console.log(this);
+		
+		//Calls methods that should be calculated in time with the engine
+		//NOTE: 
+		Events.on(engine, "beforeUpdate", () => {
+			this.update();
+		});
+	
 	}
 
 	/**

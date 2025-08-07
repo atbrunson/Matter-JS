@@ -37,11 +37,11 @@ var render = Render.create({
 		width: 800,
 		height: 600,
 		hasBounds: true,
-		wireframes: true,
+		wireframes: false,
 		showAngleIndicator: true,
 		showCollisions: false,
 		showVelocity: true,
-		showDebug: true,
+		showDebug: false,
 	}
 });
 Render.run(render);
@@ -214,15 +214,13 @@ Events.on(render, 'beforeRender', function () {
 
 });
 
-let box = {}
-
 // create four boxes for walls floor & ceiling
 Composite.add(world, [
 	// walls
-	Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
-	Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),
-	Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
-	Bodies.rectangle(0, 300, 50, 600, { isStatic: true })
+	Bodies.rectangle(400, -25, 850, 50, { isStatic: true }),
+	Bodies.rectangle(400, 625, 850, 50, { isStatic: true }),
+	Bodies.rectangle(825, 300, 50, 700, { isStatic: true }),
+	Bodies.rectangle(-25, 300, 50, 700, { isStatic: true })
 ]);
 
 
@@ -238,8 +236,15 @@ var ship = new Ship(
 	15 		// radius
 );
 
+// Events.on(engine,"beforeUpdate", function(){
+// 	ship.update()
+// });
+
+
 // var player = new Player(400, 300, 100)
 // document.onclose = function() {
 // 	// ship.destroy()
 // 	player.kill()
 // };
+
+//let progbar = new ProgressBar (25,325,"ship.fuel",1,0)
