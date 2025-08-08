@@ -235,7 +235,6 @@ var ship = new Ship(
 	300, 	// initial y position
 	15 		// radius
 );
-
 // Events.on(engine,"beforeUpdate", function(){
 // 	ship.update()
 // });
@@ -247,4 +246,6 @@ var ship = new Ship(
 // 	player.kill()
 // };
 
-//let progbar = new ProgressBar (25,325,"ship.fuel",1,0)
+//let progbar1 = new ProgressBar (25,325,ship,"fuel",1,0)
+let progbar2 = new ProgressBar (35,325,ship,"fuel",1,0)
+

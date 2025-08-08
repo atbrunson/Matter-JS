@@ -70,6 +70,8 @@ class Ship {
 	 * @todo: Implement player state updates, such as animations or physics interactions.
 	 */
 	update() {
+		if (this.fuel < 0.00) ship.fuel = 0
+		this.speed = this.body.speed
 		// this.handleThrust()
 		/*
 		Mass Balance:
@@ -83,7 +85,7 @@ class Ship {
 		*/
 
 		//console.log(this.fuel)
-		
+
 	}
 	/**
 	 * @method assemble
@@ -121,37 +123,45 @@ class Ship {
 	 * @description Moves the player up by setting its velocity.
 	 */
 	forward(force) {
-		Matter.Body.applyForce(this.body, this.body.position, {
-			x: force * Math.sin(this.body.angle - Math.PI / 2),
-			y: -force * Math.cos(this.body.angle - Math.PI / 2)
-		});
+		if (this.fuel > 0.00) {
+			Matter.Body.applyForce(this.body, this.body.position, {
+				x: force * Math.sin(this.body.angle - Math.PI / 2),
+				y: -force * Math.cos(this.body.angle - Math.PI / 2)
+			});
 
-		this.fuel -= force * 0.5; // Decrease fuel based on thrust
+			this.fuel -= force * 0.5; // Decrease fuel based on thrust}
 
+		}
 	};
 	/** */
 	aftward(force) {
-		Matter.Body.applyForce(this.body, this.body.position, {
-			x: -force * Math.sin(this.body.angle - Math.PI / 2),
-			y: force * Math.cos(this.body.angle - Math.PI / 2)
-		});
-		this.fuel -= 0.01; // Decrease fuel on thrust
+		if (this.fuel > 0.00) {
+			Matter.Body.applyForce(this.body, this.body.position, {
+				x: -force * Math.sin(this.body.angle - Math.PI / 2),
+				y: force * Math.cos(this.body.angle - Math.PI / 2)
+			});
+			this.fuel -= 0.01; // Decrease fuel on thrust}
+		}
 	};
 	/** */
 	portward(force) {
-		Matter.Body.applyForce(this.body, this.body.position, {
-			x: -force * Math.cos(this.body.angle - Math.PI / 2),
-			y: -force * Math.sin(this.body.angle - Math.PI / 2)
-		});
-		this.fuel -= 0.01; // Decrease fuel on thrust
+		if (this.fuel > 0.00) {
+			Matter.Body.applyForce(this.body, this.body.position, {
+				x: -force * Math.cos(this.body.angle - Math.PI / 2),
+				y: -force * Math.sin(this.body.angle - Math.PI / 2)
+			});
+			this.fuel -= 0.01; // Decrease fuel on thrust}
+		}
 	};
 	/** */
 	starward(force) {
-		Matter.Body.applyForce(this.body, this.body.position, {
-			x: force * Math.cos(this.body.angle - Math.PI / 2),
-			y: force * Math.sin(this.body.angle - Math.PI / 2)
-		});
-		this.fuel -= 0.01; // Decrease fuel on thrust
+		if (this.fuel > 0.00) {
+			Matter.Body.applyForce(this.body, this.body.position, {
+				x: force * Math.cos(this.body.angle - Math.PI / 2),
+				y: force * Math.sin(this.body.angle - Math.PI / 2)
+			});
+			this.fuel -= 0.01; // Decrease fuel on thrust
+		}
 	};
 	/** 
 	 * @method rotateLeft
