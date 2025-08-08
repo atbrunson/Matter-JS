@@ -38,7 +38,7 @@ class Ship {
 		]);
 
 		// set the ships initial fuel value
-		this.fuel = radius * 0.05
+		this.fuel = radius * 0.025
 		
 		// FOR TESTING ONLY: adds the fuel mass to the ship
 		Matter.Body.setMass(this.body, this.fuel + radius * 0.1);

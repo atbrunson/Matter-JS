@@ -38,7 +38,7 @@ var render = Render.create({
 		height: 600,
 		hasBounds: true,
 		wireframes: false,
-		showAngleIndicator: true,
+		showAngleIndicator: false,
 		showCollisions: false,
 		showVelocity: true,
 		showDebug: false,

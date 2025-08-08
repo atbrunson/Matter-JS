@@ -4,7 +4,6 @@
  * @note Will divide by ZER0.
  * 
 */
-
 class ProgressBar {
     constructor(x, y, refObj, refProp, max, min) {
         this.w = 5
@@ -14,18 +13,23 @@ class ProgressBar {
         this.y = y + this.h / 2;
         this.max = max;
         this.min = min;
-        this.delta = 0.0001
+        
+        
+        //this.valueRef = valueRef
+        //this.refValue = JSON.parse(refValue) // copying an opbject from a string reference
+        
+        
         this.refObj = refObj
         this.refProp = refProp
         if (this.refObj.hasOwnProperty(refProp)){
-            this.value = this.refObj[this.refProp] // saving the value
+            this.value = this.refObj[this.refProp] // here saving there the value
         }
-        this.value == 0 || this.value == undefined ? this.value = 0.0001 : this.value
-        
-        console.log(this.value, this.value == 0 || this.value == undefined)
+        this.value === 0 ? this.value + 0.0001 :
+
         this.progress = this.value * this.h / (this.max - this.min)
 
         let colFilter = Body.nextCategory
+
 
         this.bar = Composite.create({ label: "progressbar" })
         Composite.add(this.bar, [
@@ -58,12 +62,10 @@ class ProgressBar {
             })
 
         ])
-        Events.on(engine, "beforeUpdate", () => {
-            this.update();
-        })
-
+        Events.on(engine, "beforeUpdate", () => this.update())
         Matter.World.add(engine.world, this.bar);
         console.log(this)
+
 
     }
 
@@ -78,8 +80,9 @@ class ProgressBar {
         this.scalar = 1
 
 
-        if (this.delta < this.lastProgress - this.progress) {
+        if (this.lastProgress != this.progress) {
             console.log(`lV: ${this.lastValue} v: ${this.value} lP: ${this.lastProgress} p: ${this.progress}`)
+            
             this.scalar = 1- Math.abs(this.lastProgress - this.progress)/this.lastProgress
             
             
@@ -90,41 +93,23 @@ class ProgressBar {
             this.value = this.lastValue
         }
 
-        //console.log(this.progress, this.lastProgress, this.scalar, this.value)
-        
+        if (this.lastProgress/this.h < 0.25){
+            this.bar.bodies[0].render.strokeStyle = "red"
+            this.bar.bodies[0].render.opacity = 1
+            this.bar.bodies[1].render.fillStyle = "red"         
+            this.bar.bodies[1].render.opacity = 1    
+            }
+
+                
         /** TODO:
         * if progress:
         *   >90% => baseColor & opacity 50%
         *   >75% => baseColor & opacity 75%
         *   >50% => baseColor + yellow & opacity 75%
         *   >25% => baseColor + yellow/2 + red/2 & opacity 100%
-        *   >10% => baseColor + red & opacity 100%
-        *   > 5% => Red + BaseColor/2 & opcity 100%
         * baseColor exapmle "lightgrey"
         */
-        
 
-
-
-        //console.log(this.progress, this.value, this.lastValue)
-
-        //look in the object referenced and get the current value
-        // this.value = ship.fuel
-        // this.progress = this.value * this.h / (this.max - this.min)
-        // Body.scale(this.bar.bodies[1],1,this.progress)
-        //console.log(this.progress)
-        // // calculate the progress based on the new value
-        // this.progress = this.value * this.h / (this.max - this.min)
-
-
-        // if (filling) {
-        //     // Update height and position
-        //     Matter.Body.setPosition(filling, {
-        //         x: this.x,
-        //         y: this.y + (this.h - this.progress) / 2 - 1
-        //     });
-        //     Matter.Body.scale(filling, 1, this.progress / filling.bounds.max.y - filling.bounds.min.y);
-        // }
     };
 
 }
