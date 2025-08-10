@@ -22,7 +22,7 @@ var engine = Engine.create(),
 	world = engine.world;
 
 // Set WORLD Properties
-world.gravity.scale = 0.0
+engine.gravity.scale = 0.0
 
 // Create & start the RUNNER
 var runner = Runner.create();
@@ -38,10 +38,10 @@ var render = Render.create({
 		height: 600,
 		hasBounds: true,
 		wireframes: false,
-		showAngleIndicator: true,
+		showAngleIndicator: false,
 		showCollisions: false,
 		showVelocity: true,
-		showDebug: true,
+		showDebug: false,
 	}
 });
 Render.run(render);
@@ -206,15 +206,13 @@ Events.on(render, 'beforeRender', function () {
 
 });
 
-let box = {}
-
 // create four boxes for walls floor & ceiling
 Composite.add(world, [
 	// walls
-	Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
-	Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),
-	Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
-	Bodies.rectangle(0, 300, 50, 600, { isStatic: true })
+	Bodies.rectangle(400, -25, 850, 50, { isStatic: true }),
+	Bodies.rectangle(400, 625, 850, 50, { isStatic: true }),
+	Bodies.rectangle(825, 300, 50, 700, { isStatic: true }),
+	Bodies.rectangle(-25, 300, 50, 700, { isStatic: true })
 ]);
 
 
@@ -224,18 +222,22 @@ Composite.add(world, [
 //player0.body.label = 'player0';
 // console.log(player)
 
-// var ship = new Ship(
-// 	400, 	// initial x position
-// 	300, 	// initial y position
-// 	10 	// radius
-// );
+var ship = new Ship(
+	400, 	// initial x position
+	300, 	// initial y position
+	15 		// radius
+);
+// Events.on(engine,"beforeUpdate", function(){
+// 	ship.update()
+// });
 
-var player = new Player(400, 300, 25)
-player.update()
 
+// var player = new Player(400, 300, 100)
+// document.onclose = function() {
+// 	// ship.destroy()
+// 	player.kill()
+// };
 
-document.onclose = function() {
-	// ship.destroy()
-	player.kill()
-};
-console.log(engine)
+//let progbar1 = new ProgressBar (25,325,ship,"fuel",1,0)
+let progbar2 = new ProgressBar (35,325,ship,"fuel",1,0)
+

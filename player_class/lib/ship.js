@@ -26,21 +26,23 @@ class Ship {
 	 * @param {{}} [options] will default with standard matter.js properties
 	 */
 	constructor(x, y, radius, options = {}) {
-
-		// build the ship from array of bodies
-		//this.body = Bodies.polygon(x, y, sides, radius, { chamfer: { radius: radius / 6 } }),
+		// build the ship from array of vertices
 		this.body = Bodies.fromVertices(x, y, [
+
+			{ x: x + .75 * radius, y: y - radius / 5 },
+			{ x: x + .75 * radius, y: y + radius / 5 },
 			{ x: x + radius, y: y - radius },
-			{ x: x - radius, y: y },
+			{ x: x - radius, y: y - radius / 500 },
+			{ x: x - radius, y: y + radius / 500 },
 			{ x: x + radius, y: y + radius },
-			{ x: x + 1.25 * radius, y: y-radius/10 },
-			{ x: x + 1.25 * radius, y: y+radius/10 },
 		]);
-		this.body.fuel = radius * 0.05
-		Matter.Body.setMass(this.body, radius + this.body.fuel);
-		Matter.Body.setCentre(this.body, { x: x + .5 *radius, y: y });
 
-
+		// set the ships initial fuel value
+		this.fuel = radius * 0.025
+		
+		// FOR TESTING ONLY: adds the fuel mass to the ship
+		Matter.Body.setMass(this.body, this.fuel + radius * 0.1);
+		Matter.Body.setCentre(this.body, { x: x + .25 * radius, y: y });
 		Matter.World.add(engine.world, this.body);
 
 		// Setup the player controller
@@ -55,6 +57,34 @@ class Ship {
 		this.controller.init();
 		console.log('Ship created at', x, y, 'with size', radius);
 		console.log(this);
+
+		//Calls methods that should be calculated in time with the engine
+		//NOTE: 
+		Events.on(engine, "beforeUpdate", () => {
+			this.update();
+		});
+	}
+	/**
+	 * @method update
+	 * @description Updates the player state. This can be used to implement additional logic such as animations or physics interactions.
+	 * @todo: Implement player state updates, such as animations or physics interactions.
+	 */
+	update() {
+		if (this.fuel < 0.00) ship.fuel = 0
+		this.speed = this.body.speed
+		// this.handleThrust()
+		/*
+		Mass Balance:
+			Any mass loaded, unloaded, ejected or jettisoned
+			
+		Engergy Balance:
+			Any Radiant, Conductive, Convective
+			Reactors turn mass into useable energy
+			Thrusters eject energitc mass as propellant
+			Produciton Modules use energy to process mass
+		*/
+
+		//console.log(this.fuel)
 
 	}
 	/**
@@ -88,88 +118,91 @@ class Ship {
 	 */
 	follow() {
 		// Needs viewPoint logic
-		}
-
+	};
 	/**
 	 * @method thrust
 	 * @param {Number} force - The speed at which the player moves up.
 	 * @description Moves the player up by setting its velocity.
 	 */
 	forward(force) {
-		Matter.Body.applyForce(this.body, this.body.position, {
-			x: force * Math.sin(this.body.angle - Math.PI / 2),
-			y: -force * Math.cos(this.body.angle - Math.PI / 2)
-		});
-		
-		this.body.fuel -= force * 0.1; // Decrease fuel based on thrust
+		if (this.fuel > 0.00) {
+			Matter.Body.applyForce(this.body, this.body.position, {
+				x: force * Math.sin(this.body.angle - Math.PI / 2),
+				y: -force * Math.cos(this.body.angle - Math.PI / 2)
+			});
 
+			this.fuel -= force * 0.5; // Decrease fuel based on thrust}
+
+		}
 	};
-
+	/** */
 	aftward(force) {
-		Matter.Body.applyForce(this.body, this.body.position, {
-			x: -force * Math.sin(this.body.angle - Math.PI / 2),
-			y: force * Math.cos(this.body.angle - Math.PI / 2)
-		});
+		if (this.fuel > 0.00) {
+			Matter.Body.applyForce(this.body, this.body.position, {
+				x: -force * Math.sin(this.body.angle - Math.PI / 2),
+				y: force * Math.cos(this.body.angle - Math.PI / 2)
+			});
+			this.fuel -= 0.01; // Decrease fuel on thrust}
+		}
 	};
-
+	/** */
 	portward(force) {
-		Matter.Body.applyForce(this.body, this.body.position, {
-			x: -force * Math.cos(this.body.angle - Math.PI / 2),
-			y: -force * Math.sin(this.body.angle - Math.PI / 2)
-		});
+		if (this.fuel > 0.00) {
+			Matter.Body.applyForce(this.body, this.body.position, {
+				x: -force * Math.cos(this.body.angle - Math.PI / 2),
+				y: -force * Math.sin(this.body.angle - Math.PI / 2)
+			});
+			this.fuel -= 0.01; // Decrease fuel on thrust}
+		}
 	};
-
+	/** */
 	starward(force) {
-		Matter.Body.applyForce(this.body, this.body.position, {	
-			x: force * Math.cos(this.body.angle - Math.PI / 2),
-			y: force * Math.sin(this.body.angle - Math.PI / 2)
-		});	
+		if (this.fuel > 0.00) {
+			Matter.Body.applyForce(this.body, this.body.position, {
+				x: force * Math.cos(this.body.angle - Math.PI / 2),
+				y: force * Math.sin(this.body.angle - Math.PI / 2)
+			});
+			this.fuel -= 0.01; // Decrease fuel on thrust
+		}
 	};
-
-	/** @method rotateLeft
+	/** 
+	 * @method rotateLeft
 	 * @param {Number} rotation - The amount to rotate the player left.
 	*/
 	rotateLeft(rotation) {
 		Matter.Body.setAngularVelocity(this.body, -rotation)
-		console.log(`Rotating right by ${this.body.angle}`)
-	}
-	/** @method rotateRight
+		//console.log(`Rotating right by ${this.body.angle}`)
+	};
+	/**
+	 * @method rotateRight
 	 * @param {Number} rotation - The amount to rotate the player right.
 	*/
 	rotateRight(rotation) {
 		Matter.Body.setAngularVelocity(this.body, rotation);
-		console.log(`Rotating right by ${this.body.angle}`)
-	}
-
+		//console.log(`Rotating right by ${this.body.angle}`)
+	};
 	/**
 	 * @method stop
-	 * @description reverses the velocity of the player, effectively stopping it.
+	 * @description sets ship velocity to {x: 0, y: 0}
 	 */
 	stop() {
-		while (this.body.speed >= 0.1) {
-			Matter.Body.setVelocity(this.body, {
-				x: 0,
-				y: 0
+		Matter.Body.setVelocity(this.body, {
+			x: 0,
+			y: 0
+		});
+		// Log the speed for debugging purposes
+		console.log(`${this} STOPPED!`);
+	};
+	/**	*/
+	handleThrust() {
+		if (this.controller.acitveKeys.size) {
+			let showkeys = '';
+			this.controller.acitveKeys.forEach(key => {
+				showkeys += key + ' ';
 			});
-			// Log the speed for debugging purposes
-			console.log(`player speed: ${this.body.speed}`);
+			console.log(showkeys);
 		}
 	}
-
-	thrust(direction) {
-		// Apply force in the direction of the thruster
-		// track fuel consumption
-	}
-
-	/**
-	 * @method update
-	 * @description Updates the player state. This can be used to implement additional logic such as animations or physics interactions.
-	 * @todo: Implement player state updates, such as animations or physics interactions.
-	 */
-	update() {
-		// Additional logic to update player state
-	}
-
 	/**
 	 * @method destroy
 	 * @description Removes the player from the world and cleans up resources.
@@ -181,3 +214,6 @@ class Ship {
 		this.controller = null;
 	}
 }
+
+
+

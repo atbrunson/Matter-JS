@@ -98,6 +98,13 @@ class Player {
 
 		console.log('Player created at', x, y, 'with size', width, height);
 		console.log(this);
+		
+		//Calls methods that should be calculated in time with the engine
+		//NOTE: 
+		Events.on(engine, "beforeUpdate", () => {
+			this.update();
+		});
+	
 	}
 
 	/**
@@ -115,6 +122,7 @@ class Player {
 	 */
 	moveUp(speed) {
 		Matter.Body.setVelocity(this.mainBody, { x: this.mainBody.velocity.x, y: -speed });
+		Matter.Body.setVelocity(this.mainBody, { x: this.mainBody.velocity.x, y: -speed });
 	}
 	/**
 	 * @method moveLeft
@@ -122,6 +130,7 @@ class Player {
 	 * @description Moves the player left by setting its velocity.
 	 */
 	moveLeft(speed) {
+		Matter.Body.setVelocity(this.mainBody, { x: -speed, y: this.mainBody.velocity.y });
 		Matter.Body.setVelocity(this.mainBody, { x: -speed, y: this.mainBody.velocity.y });
 	}
 	/**
@@ -131,6 +140,7 @@ class Player {
 	 */
 	moveDown(speed) {
 		Matter.Body.setVelocity(this.mainBody, { x: this.mainBody.velocity.x, y: speed });
+		Matter.Body.setVelocity(this.mainBody, { x: this.mainBody.velocity.x, y: speed });
 	}
 	/**
 	 * @method moveRight
@@ -139,6 +149,7 @@ class Player {
 	 */
 	moveRight(speed) {
 		Matter.Body.setVelocity(this.mainBody, { x: speed, y: this.mainBody.velocity.y });
+		Matter.Body.setVelocity(this.mainBody, { x: speed, y: this.mainBody.velocity.y });
 	}
 
 	/** @method rotateLeft
@@ -146,11 +157,13 @@ class Player {
 	*/
 	rotateLeft(rotation) {
 		Matter.Body.setAngularVelocity(this.mainBody, -rotation)
+		Matter.Body.setAngularVelocity(this.mainBody, -rotation)
 	}
 	/** @method rotateRight
 	 * @param {Number} rotation - The amount to rotate the player right.
 	*/
 	rotateRight(rotation) {
+		Matter.Body.setAngularVelocity(this.mainBody, rotation)
 		Matter.Body.setAngularVelocity(this.mainBody, rotation)
 	}
 
