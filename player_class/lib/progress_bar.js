@@ -13,12 +13,16 @@ class ProgressBar {
         this.y = y + this.h / 2;
         this.max = max;
         this.min = min;
-        
-        
-        //this.valueRef = valueRef
-        //this.refValue = JSON.parse(refValue) // copying an opbject from a string reference
-        
-        
+        this.opacity = 0.75
+
+        // Drawing on direct to canvas from the top left to bottom right
+        // this.x = x
+        // this.y = y
+
+        //
+
+
+               
         this.refObj = refObj
         this.refProp = refProp
         if (this.refObj.hasOwnProperty(refProp)){
@@ -29,6 +33,7 @@ class ProgressBar {
         this.progress = this.value * this.h / (this.max - this.min)
 
         let colFilter = Body.nextCategory
+
 
 
         this.bar = Composite.create({ label: "progressbar" })
@@ -62,7 +67,7 @@ class ProgressBar {
             })
 
         ])
-        Events.on(engine, "beforeUpdate", () => this.update())
+        Events.on(engine, "afterREnder", () => this.update())
         Matter.World.add(engine.world, this.bar);
         console.log(this)
 
@@ -71,6 +76,9 @@ class ProgressBar {
 
     update() {
         
+        //ctx.fillStyle = `rgba(211, 211, 211, ${this.opacity})` // filling the color style this way would be hard perhaps paper.js or p5-js
+        //ctx.strokeStyle = `rgba(211, 211, 211, ${this.opacity})`
+
         let boarder = this.bar.bodies[0]
         let filling = this.bar.bodies[1]
         

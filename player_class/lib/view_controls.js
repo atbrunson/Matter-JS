@@ -3,9 +3,9 @@
 engine = Matter.Eengine
 
 
-var navMouse = Matter.Mouse.create(Matter.Render.canvas),
+var mouse = Matter.Mouse.create(Matter.Render.canvas),
 	mouseConstraint = Matter.MouseConstraint.create(engine, {
-		mouse: navMouse,
+		mouse: mouse,
 		constraint: {
 			stiffness: 0.2,
 			render: {
@@ -49,16 +49,15 @@ render.canvas.addEventListener('mouseout', function () {
 
 
 //---DEBUG_SCROLL_WHEEL---//
-let wheelCounter = 0
-
-render.canvas.addEventListener('wheel', function () {
-	// console.log(`matter wheel: ${mouse.wheelDelta} | wheelcounter: ${wheelCounter}`)
-})
-//logs keyup events
-document.addEventListener('keyup', function (event) {
-	// console.log(`keyup: ${event.key}`);
-}
-)
+// let wheelCounter = 0
+// render.canvas.addEventListener('wheel', function () {
+// 	// console.log(`matter wheel: ${mouse.wheelDelta} | wheelcounter: ${wheelCounter}`)
+// })
+// //logs keyup events
+// document.addEventListener('keyup', function (event) {
+// 	// console.log(`keyup: ${event.key}`);
+// }
+// )
 
 
 // use the matter.js render events to control view
@@ -68,9 +67,7 @@ Events.on(render, 'beforeRender', function () {
 	// BROKEN: Mouse scroll wheel controls 
 	var scaleFactor = mouse.wheelDelta * -0.1;
 
-	wheelCounter += mouse.wheelDelta
-
-
+	// wheelCounter += mouse.wheelDelta
 
 	if (scaleFactor !== 0) {
 		if ((scaleFactor < 0 && boundsScale.x >= 0.6) || (scaleFactor > 0 && boundsScale.x <= 1.4)) {
@@ -101,7 +98,6 @@ Events.on(render, 'beforeRender', function () {
 		// update mouse
 		Mouse.setScale(mouse, boundsScale);
 		Mouse.setOffset(mouse, render.bounds.min);
-
 	}
 
 	// get vector from mouse relative to centre of viewport
@@ -117,7 +113,7 @@ Events.on(render, 'beforeRender', function () {
 		&& Math.abs(deltaCentre.y) >= 0.80 * render.canvas.height / 2
 		&& Math.abs(deltaCentre.y) < render.canvas.height / 2;
 
-	//DISPLAY MOUSE POSITION
+	//DEBUG MOUSE POSITION//
 	// console.log(`
 	// 	scrolling: ${scrolling}
 	// 	m.offset:  ${mouse.offset.x}, ${mouse.offset.y}
