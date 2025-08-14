@@ -1,14 +1,28 @@
 /**
- * Class representing a keyboard control module.
+ * @module KeyboardControl Class for Matter.js
+ * @author atbrunson github.com/atbrunson
+ * @description This module defines a Player class that can be controlled via keyboard inputs in a Matter Class representing a keyboard control module.
  * Handles keyboard input events and provides methods to manage key bindings and actions.
  *
- * @class
  * @example
  * const keyboard = new KeyboardControl();
- * keyboard.bindKey('ArrowUp', () => moveUp());
+ * keyboard.bindKey('w', () => move(upVector));
  *
  * @property {Object} keyBindings - An object mapping key names to their corresponding action callbacks.
- * @property {Map} activeKeys - An array of currently ai
+ * 
+ * @example
+ * console.table(keyboard.keyBindings)
+ * // Yields:
+ * // d:    move(rightVector)
+ * // w:    move(upVector)
+ * 
+ * @property {Set} activeKeys - a set of all currently pressed keys. Allows better mulit input controls.
+ * 
+ * @example
+ * if (keyboard.activeKeys["w"] && keyboard.activeKeys["d"]){
+ *  move(Math.sqr(upVector^2 + rightVector^2)) 
+ *  };
+ * 
  * @method bindKey - Binds a specific key to an action callback.
  * @method unbindKey - Removes the binding for a specific key.
  * @method handleKeyDown - Handles the keydown event and triggers the bound action.
@@ -41,7 +55,7 @@ class KeyboardControl {
         this.keyBindings[key] = action;
         if (cancel) {
             // Bind the cancel action to the key + 'Up' event
-            this.keyBindings[key+"Up"] = cancel;
+            this.keyBindings[key + "Up"] = cancel;
         }
     }
     /**
@@ -67,13 +81,13 @@ class KeyboardControl {
     /**
      * Handles the keyup event. This can be used to stop actions or reset states.
      * @param {KeyboardEvent} event - The keyboard event object.
-     */ 
+     */
     handleKeyUp(event) {
         this.acitveKeys.delete(event.key)
-        const cancel = this.keyBindings[event.key+ "Up"];
+        const cancel = this.keyBindings[event.key + "Up"];
         if (cancel) {
             cancel(event);
-        } 
+        }
         // console.log(this)
     }
     /**
@@ -84,5 +98,5 @@ class KeyboardControl {
         document.removeEventListener('keyup', this.handleKeyUp.bind(this));
         this.keyBindings = {};
     }
-    
+
 }

@@ -16,17 +16,38 @@
  * const ship = new Ship(100, 100, 50);
  */
 
+var Body = Matter.Body,
+	Bodies = Matter.Bodies,
+	Composite = Matter.Composite,
+	Events = Matter.Events
+
+
+
+Events.on()
+
+//render = get element by typ Matter.Render
+//engine = get element by typ Matter.Engine
+//engine.world =  get element by typ Matter.Engine.World
+
+
+
 class Ship {
 	/**
 	 * @constructs Ship object
+	 * @param {Matter.Engine} engine the top level composite in your Matter.Engine
 	 * @param {Number} x of initial location
 	 * @param {Number} y of initial location
 	 * @param {Number} height of new object
 	 * @param {Number} width will default to half the height
 	 * @param {{}} [options] will default with standard matter.js properties
 	 */
-	constructor(x, y, radius, options = {}) {
+	constructor(engine_world, x, y, radius, options = {}) {
 		// build the ship from array of vertices
+		this.engine = engine;
+		this.engine.hasOwnProperty.typeof(Composite)
+
+
+
 		this.body = Bodies.fromVertices(x, y, [
 
 			{ x: x + .75 * radius, y: y - radius / 5 },
@@ -39,11 +60,11 @@ class Ship {
 
 		// set the ships initial fuel value
 		this.fuel = radius * 0.025
-		
+
 		// FOR TESTING ONLY: adds the fuel mass to the ship
 		Matter.Body.setMass(this.body, this.fuel + radius * 0.1);
 		Matter.Body.setCentre(this.body, { x: x + .25 * radius, y: y });
-		Matter.World.add(engine.world, this.body);
+		Matter.World.add(this.engine,world, this.body);
 
 		// Setup the player controller
 		this.controller = new KeyboardControl();
@@ -92,22 +113,22 @@ class Ship {
 	 * @description Initializes ship by calculating thruster positions & summing up the thrust forces in each direction.
 	 */
 	assemble() {
-	/*
-		Check for thrusters
-		for (thruster in thrusters){
-			this.thrust += thruster.vector 
-		}
-		Check for storage modules
-		Check for production modules
-		Check for 
-		
-		Check for minimum ship systems:
-		- (1) Thruster
-		- (1) life support
-		- (1) control module
-		Matter.Composite.add(module || component)
-		Matter.Constraint.create(this.body , module.body, CONSTRAINT_TYPE)
-	*/
+		/*
+			Check for thrusters
+			for (thruster in thrusters){
+				this.thrust += thruster.vector 
+			}
+			Check for storage modules
+			Check for production modules
+			Check for 
+			
+			Check for minimum ship systems:
+			- (1) Thruster
+			- (1) life support
+			- (1) control module
+			Matter.Composite.add(module || component)
+			Matter.Constraint.create(this.body , module.body, CONSTRAINT_TYPE)
+		*/
 	}
 
 
@@ -214,6 +235,5 @@ class Ship {
 		this.controller = null;
 	}
 }
-
-
+export default Ship;
 

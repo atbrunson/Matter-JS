@@ -1,6 +1,6 @@
+import Ship from "./lib/ship.js"
 
-// Matter.js Module Aliases
-
+// Matter.js Libaray Aliases
 var Engine = Matter.Engine,
 	Render = Matter.Render,
 	Runner = Matter.Runner,
@@ -16,24 +16,26 @@ var Engine = Matter.Engine,
 	Vector = Matter.Vector,
 	Bounds = Matter.Bounds,
 	Detector = Matter.Detector;
-
-// Create the ENGINE
-var engine = Engine.create(),
+	
+	// Create the ENGINE
+	var engine = Engine.create(),
 	world = engine.world;
+	
+	// Export world object for use in other modules
+	export { engine, world };
 
-// Set WORLD Properties
-engine.gravity.scale = 0.0
+	// Set WORLD Properties
+	engine.gravity.scale = 0.0
 
-// Create & start the RUNNER
-var runner = Runner.create();
-Runner.run(runner, engine);
-
-
-// Create & start the RENDERER
-var render = Render.create({
-	element: document.body,
-	engine: engine,
-	options: {
+	// Create & start the RUNNER
+	var runner = Runner.create();
+	Runner.run(runner, engine);
+		
+	// Create & start the RENDERER
+	var render = Render.create({
+		element: document.body,
+		engine: engine,
+		options: {
 		width: 800,
 		height: 600,
 		hasBounds: true,
@@ -44,16 +46,17 @@ var render = Render.create({
 		showDebug: false,
 	}
 });
+
 Render.run(render);
 
 
 // Create composite for our contain{er
 var container = Composite.create ({
 	bodies: [// Specifies four rectangles for the walls floor & ceiling
-		ceiling = Bodies.rectangle(400, -25, 850, 50, { isStatic: true, label: "Ceiling" }),
-		floor = Bodies.rectangle(400, 625, 850, 50, { isStatic: true, label: "Floor" }),
-		rWall = Bodies.rectangle(825, 300, 50, 700, { isStatic: true, label: "Right Wall" }),
-		lWall = Bodies.rectangle(-25, 300, 50, 700, { isStatic: true, label: "Left Wall" })
+		Bodies.rectangle(400, -25, 850, 50, { isStatic: true, label: "Ceiling" }),
+		Bodies.rectangle(400, 625, 850, 50, { isStatic: true, label: "Floor" }),
+		Bodies.rectangle(825, 300, 50, 700, { isStatic: true, label: "Right Wall" }),
+		Bodies.rectangle(-25, 300, 50, 700, { isStatic: true, label: "Left Wall" })
 	],
 	label: "Container",
 	}
@@ -67,6 +70,7 @@ Composite.add(world,container)
 // console.log(player)
 
 var ship = new Ship(
+	engine,
 	400, 	// initial x position
 	300, 	// initial y position
 	15 		// radius
@@ -87,8 +91,8 @@ let progbar2 = new ProgressBar(35, 325, ship, "fuel", 1, 0)
 
 
 
-var mouse =  Matter.Mouse.create(render.canvas),
-	mouseConstraint = Matter.MouseConstraint.create(engine, {
+var mouse =  Mouse.create(render.canvas),
+	mouseConstraint = MouseConstraint.create(engine, {
 		mouse: mouse,
 		constraint: {
 			stiffness: 0.2,
@@ -105,7 +109,7 @@ render.mouse = mouse;
 
 
 // Show so translation direction and speed
-ctx = render.canvas.getContext("2d");
+var ctx = render.canvas.getContext("2d");
 
 
 // create an additional render property to track if the mouse is hovering over the canvas
