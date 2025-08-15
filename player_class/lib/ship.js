@@ -27,19 +27,20 @@ class Ship {
 	 */
 	constructor(x, y, radius, options = {}) {
 		// build the ship from array of vertices
-		this.body = Bodies.fromVertices(x, y, [
-
-			{ x: x + .75 * radius, y: y - radius / 5 },
+		this.body = Bodies.fromVertices(x, y,
+			[{ x: x + .75 * radius, y: y - radius / 5 },
 			{ x: x + .75 * radius, y: y + radius / 5 },
 			{ x: x + radius, y: y - radius },
 			{ x: x - radius, y: y - radius / 500 },
 			{ x: x - radius, y: y + radius / 500 },
-			{ x: x + radius, y: y + radius },
-		]);
+			{ x: x + radius, y: y + radius },],
+			{ label: this.constructor.name } //reference name of class
+		
+		);
 
 		// set the ships initial fuel value
 		this.fuel = radius * 0.025
-		
+
 		// FOR TESTING ONLY: adds the fuel mass to the ship
 		Matter.Body.setMass(this.body, this.fuel + radius * 0.1);
 		Matter.Body.setCentre(this.body, { x: x + .25 * radius, y: y });
@@ -92,22 +93,22 @@ class Ship {
 	 * @description Initializes ship by calculating thruster positions & summing up the thrust forces in each direction.
 	 */
 	assemble() {
-	/*
-		Check for thrusters
-		for (thruster in thrusters){
-			this.thrust += thruster.vector 
-		}
-		Check for storage modules
-		Check for production modules
-		Check for 
-		
-		Check for minimum ship systems:
-		- (1) Thruster
-		- (1) life support
-		- (1) control module
-		Matter.Composite.add(module || component)
-		Matter.Constraint.create(this.body , module.body, CONSTRAINT_TYPE)
-	*/
+		/*
+			Check for thrusters
+			for (thruster in thrusters){
+				this.thrust += thruster.vector 
+			}
+			Check for storage modules
+			Check for production modules
+			Check for 
+			
+			Check for minimum ship systems:
+			- (1) Thruster
+			- (1) life support
+			- (1) control module
+			Matter.Composite.add(module || component)
+			Matter.Constraint.create(this.body , module.body, CONSTRAINT_TYPE)
+		*/
 	}
 
 

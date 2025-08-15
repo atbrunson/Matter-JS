@@ -4,8 +4,26 @@
  * @note Will divide by ZER0.
  * 
 */
+
+/**
+ * @class ProgressBar
+ * @description Create a new progress bar x, y
+
+ *  
+ */
 class ProgressBar {
-    constructor(x, y, refObj, refProp, max, min) {
+    /**
+    * @param {number} x canvas x position
+    * @param {number} y canvas y position
+    * @param {} refObj object that contains tracked property
+    * @param {String} refProp property name in tracked object
+    * @param {number} min lower bar boundary
+    * @param {number} max upper bar boundary
+    * @param {number} this.w the width of the bar
+    * @param {number} this.h the height of the bar
+    */
+    constructor(x , y, refObj, refProp, max, min) {
+
         this.w = 5
         this.h = 250
 
@@ -13,11 +31,6 @@ class ProgressBar {
         this.y = y + this.h / 2;
         this.max = max;
         this.min = min;
-        
-        
-        //this.valueRef = valueRef
-        //this.refValue = JSON.parse(refValue) // copying an opbject from a string reference
-        
         
         this.refObj = refObj
         this.refProp = refProp
@@ -64,7 +77,7 @@ class ProgressBar {
         ])
         Events.on(engine, "beforeUpdate", () => this.update())
         Matter.World.add(engine.world, this.bar);
-        console.log(this)
+        //console.log(this)
 
 
     }
