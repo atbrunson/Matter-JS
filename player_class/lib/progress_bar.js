@@ -4,8 +4,24 @@
  * @note Will divide by ZER0.
  * 
 */
+
+let Bodies = Matter.Bodies
+let Events = Matter.Events
+
+
+
+/**
+ * @class ProgressBar
+ * @param {number} x position on the canvas
+ * @param {number} y position on the canvas
+ * @param {} refObj Object containing tracked property
+ * @param {string} propPath string of the tracked property's path
+ * @param {number} min smallest value of the tracked property
+ * @param {number} mas largest value of the tracked property
+ */
+
 class ProgressBar {
-    constructor(x, y, refObj, refProp, max, min) {
+    constructor(x, y, refObj, propPath, max, min) {
         this.w = 5
         this.h = 250
 
@@ -15,18 +31,15 @@ class ProgressBar {
         this.min = min;
         this.opacity = 0.75
 
-        // Drawing on direct to canvas from the top left to bottom right
-        // this.x = x
-        // this.y = y
 
-        //
+        //Impliment common.get(refObject,"path")
+        this.obj = Matter.Common.get(refObject,propPath)
 
-
-               
-        this.refObj = refObj
-        this.refProp = refProp
-        if (this.refObj.hasOwnProperty(refProp)){
-            this.value = this.refObj[this.refProp] // here saving there the value
+        
+        
+        //This ensures that the property is exsits
+        if (this.refObj.hasOwnProperty(propPath)){
+            this.value = this.refObj[this.propPath] // saving here the value
         }
         this.value === 0 ? this.value + 0.0001 :
 
@@ -82,7 +95,7 @@ class ProgressBar {
         let boarder = this.bar.bodies[0]
         let filling = this.bar.bodies[1]
         
-        this.lastValue = this.refObj[this.refProp]
+        this.lastValue = this.refObj[this.propPath]
         this.progress = this.value * this.h / (this.max - this.min)
         this.lastProgress =  this.lastValue * this.h / (this.max - this.min)
         this.scalar = 1

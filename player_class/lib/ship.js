@@ -3,7 +3,7 @@
  * @author atbrunson github.com/atbrunson
  * @requires Matter
  * @requires KeyboardControl
- * @description This module defines a Player class that can be controlled via keyboard inputs in a Matter 
+ * @description This module defines a Player class that can be controlled via keyboard inputs in a Matter.
  */
 
 
@@ -16,36 +16,26 @@
  * const ship = new Ship(100, 100, 50);
  */
 
-var Body = Matter.Body,
-	Bodies = Matter.Bodies,
-	Composite = Matter.Composite,
-	Events = Matter.Events
-
-
-
-Events.on()
-
 //render = get element by typ Matter.Render
 //engine = get element by typ Matter.Engine
 //engine.world =  get element by typ Matter.Engine.World
 
-
-
 class Ship {
 	/**
 	 * @constructs Ship object
-	 * @param {Matter.Engine} engine the top level composite in your Matter.Engine
 	 * @param {Number} x of initial location
 	 * @param {Number} y of initial location
 	 * @param {Number} height of new object
 	 * @param {Number} width will default to half the height
 	 * @param {{}} [options] will default with standard matter.js properties
 	 */
-	constructor(engine_world, x, y, radius, options = {}) {
-		// build the ship from array of vertices
-		this.engine = engine;
-		this.engine.hasOwnProperty.typeof(Composite)
 
+	// constructor(engine_world, x, y, radius, options = {}) {
+	// 	this.engine = engine;
+	//this.engine.hasOwnProperty.typeof("Composite")
+
+
+	constructor(world,x,y,radius){
 
 
 		this.body = Bodies.fromVertices(x, y, [
@@ -64,7 +54,6 @@ class Ship {
 		// FOR TESTING ONLY: adds the fuel mass to the ship
 		Matter.Body.setMass(this.body, this.fuel + radius * 0.1);
 		Matter.Body.setCentre(this.body, { x: x + .25 * radius, y: y });
-		Matter.World.add(this.engine,world, this.body);
 
 		// Setup the player controller
 		this.controller = new KeyboardControl();
@@ -129,7 +118,7 @@ class Ship {
 			Matter.Composite.add(module || component)
 			Matter.Constraint.create(this.body , module.body, CONSTRAINT_TYPE)
 		*/
-	}
+	};
 
 
 	/**
@@ -223,7 +212,7 @@ class Ship {
 			});
 			console.log(showkeys);
 		}
-	}
+	};
 	/**
 	 * @method destroy
 	 * @description Removes the player from the world and cleans up resources.
@@ -233,7 +222,5 @@ class Ship {
 		this.controller.cleanup();
 		this.body = null;
 		this.controller = null;
-	}
+	};
 }
-export default Ship;
-

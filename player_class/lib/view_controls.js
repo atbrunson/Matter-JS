@@ -1,7 +1,7 @@
 // Create mouse element & mouse constraint to allow mouse controls
 
-engine = Matter.Eengine
-
+Vector = Matter.Vector;
+Bounds = Matter.Bounds;
 
 var mouse = Matter.Mouse.create(Matter.Render.canvas),
 	mouseConstraint = Matter.MouseConstraint.create(engine, {
