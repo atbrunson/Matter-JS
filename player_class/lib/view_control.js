@@ -6,8 +6,26 @@
  * 
  */
 
-class scrollwheelZoom
 
+
+/**
+ * @function _verifyMatter
+ * 
+//---Verify_Matter_Environment---//
+// Find Matter.Render[canvas] Matter.Engine & Matter.Engine['world'] objects in the document
+// Check that there is only one of each in the document
+// Throw error listing Matter Objects needed before initializing viewController
+*/
+/**
+ * @function _initMouseControls
+//---Verify_Matter_Mouse__MouseConstraint---//
+// Find Matter.Engine.Mouse object ? register reference | create Mouse
+// Find Matter.Engine.MouseConstraint ? register reference | create MouseConstraint
+// Register hoverOn & hoverOff event watchers
+*/
+
+
+class scrollwheelZoom
 
 // get the centre of the viewport
 var viewportCentre = {
@@ -92,15 +110,7 @@ Events.on(render, 'beforeRender', function () {
 		&& Math.abs(deltaCentre.y) >= 0.80 * render.canvas.height / 2
 		&& Math.abs(deltaCentre.y) < render.canvas.height / 2;
 
-	//DISPLAY MOUSE POSITION	
-	// console.log(`
-	// 	scrolling: ${scrolling}
-	// 	m.offset:  ${mouse.offset.x}, ${mouse.offset.y}
-	// 	m.position: ${mouse.position.x}, ${mouse.position.y}
-	// 	m.absolute: ${mouse.absolute.x}, ${mouse.absolute.y}
-	// 	deltaCentre: ${deltaCentre.x}, ${deltaCentre.y}
-	// 	centreDist: ${centreDist}
-	// 	`);
+
 	if (scrolling) {
 
 		// create a vector to translate the view, allowing the user to control view speed
@@ -152,3 +162,4 @@ render.canvas.addEventListener('wheel', function () {
 	// console.log(`matter wheel: ${mouse.wheelDelta} | wheelcounter: ${wheelCounter}`)
 });
 
+export default {scrollwheelZoom,}
