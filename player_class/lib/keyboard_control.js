@@ -100,3 +100,4 @@ class KeyboardControl {
     }
 
 }
+export {KeyboardControl}

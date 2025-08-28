@@ -1,10 +1,13 @@
 /**
  * @module Player Class for Matter.js
  * @author atbrunson github.com/atbrunson
- * @requires Matter
+ * @requires Matter Matter.js should be listed in the <scrpit> of the index.htlm
  * @requires KeyboardControl
  * @description This module defines a Player class that can be controlled via keyboard inputs in a Matter 
  */
+
+import { engine } from "../main.js";
+import { KeyboardControl } from "./keyboard_control.js";
 
 /**
  * Class representing a Player in the Matter.js world.
@@ -50,7 +53,7 @@ class Player {
 
 
 		// Create a constraint (neck joint) between mainBody and head
-		this.neckJoint = Constraint.create({
+		this.neckJoint = Matter.Constraint.create({
 			bodyA: this.mainBody,
 			pointA: { x: 0, y: -height / 2 },
 			bodyB: this.head,
@@ -65,7 +68,7 @@ class Player {
 		});
 
 		// Create a constraint (hip joint) between mainBody and head
-		this.hipJoint = Constraint.create({
+		this.hipJoint = Matter.Constraint.create({
 			bodyA: this.mainBody,
 			pointA: { x: 0, y: height / 2 },
 			bodyB: this.foot,
@@ -79,8 +82,8 @@ class Player {
 		});
 
 		// Create a composite containing all parts
-		this.body = Composite.create({ label: 'PlayerComposite' });
-		Composite.add(this.body, [this.mainBody, this.head, this.foot, this.neckJoint, this.hipJoint]);
+		this.body = Matter.Composite.create({ label: 'PlayerComposite' });
+		Matter.Composite.add(this.body, [this.mainBody, this.head, this.foot, this.neckJoint, this.hipJoint]);
 		// Optionally, you can store references to the parts if needed
 
 		Matter.World.add(engine.world, this.body);
@@ -204,3 +207,4 @@ class Player {
 		this.controller = null;
 	}
 }
+export { Player }
