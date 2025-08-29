@@ -31,9 +31,6 @@ class ProgressBar {
         this.y = y + this.h / 2;
         this.max = max;
         this.min = min;
-<<<<<<< HEAD
-        
-=======
         this.opacity = 0.75
 
         // Drawing on direct to canvas from the top left to bottom right
@@ -44,7 +41,6 @@ class ProgressBar {
 
 
                
->>>>>>> 22d7c45429d071d744e44d957019d7e6d8417276
         this.refObj = refObj
         this.refProp = refProp
         if (this.refObj.hasOwnProperty(refProp)){
