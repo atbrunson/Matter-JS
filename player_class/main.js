@@ -23,8 +23,8 @@ export { engine };
 import { Ship } from "./lib/ship.js";
 import { ProgressBar } from "./lib/progress_bar.js";
 
-// Set WORLD Properties
-engine.gravity.scale = 0.0;
+// Set properties of the WORLD
+engine.gravity.scale = 0.0;;
 
 // Create & start the RUNNER
 var runner = Runner.create();
@@ -110,6 +110,7 @@ const ctx = render.canvas.getContext("2d");
 // if (tracking) fucntion() { INSERT CODE DIRECTLY BELOW }
 
 // create an additional render property to track if the mouse is hovering over the canvas
+render.canvas.hoverOver = false;
 render.canvas.hoverOver = false;
 
 render.canvas.addEventListener("mouseover", function () {
