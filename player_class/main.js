@@ -24,7 +24,7 @@ import { Ship } from "./lib/ship.js";
 import { ProgressBar } from "./lib/progress_bar.js";
 
 // Set properties of the WORLD
-engine.gravity.scale = 0.0;;
+engine.gravity.scale = 0.0;
 
 // Create & start the RUNNER
 var runner = Runner.create();
@@ -94,7 +94,7 @@ ship.body.label = "ship";
 
 window.ship = ship;
 //Create Progress_Bar
-window.progbar1 = new ProgressBar(25, 300, ship, "ship.fuel", 0, 1);
+window.progbar1 = new ProgressBar(25, 575, ship, "ship.fuel", 0, 1);
 //let progbar2 = new ProgressBar(35, 325, ship, "fuel", 1, 0)
 console.log("progBar1", progbar1);
 

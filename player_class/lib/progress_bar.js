@@ -47,13 +47,19 @@ class ProgressBar {
     let colFilter = Matter.Body.nextCategory;
 
     this.bar = Matter.Composite.create({ label: "progressbar" });
+
     Matter.Composite.add(this.bar, [
-      Matter.Bodies.rectangle(
+      Matter.Bodies.fromVertices(
         this.x + this.w / 2,
         this.y - this.h / 2,
-        this.w,
-        this.h,
+        [
+          { x: this.x, y: this.y },
+          { x: this.x, y: this.y - this.h },
+          { x: this.x + this.w, y: this.y - this.h },
+          { x: this.x + this.w, y: this.y },
+        ],
         {
+          isStatic: true,
           label: "boarder",
           collisionFilter: {
             category: colFilter,
@@ -68,12 +74,17 @@ class ProgressBar {
         }
       ),
 
-      Matter.Bodies.rectangle(
+      Matter.Bodies.fromVertices(
         this.x + this.w / 2,
         this.y - this.value / 2,
-        this.w,
-        this.value,
+        [
+          { x: this.x, y: this.y },
+          { x: this.x, y: this.y - this.value },
+          { x: this.x + this.w, y: this.y - this.value },
+          { x: this.x + this.w, y: this.y },
+        ],
         {
+          isStatic: true,
           label: "filling",
           collisionFilter: {
             category: colFilter,
@@ -88,7 +99,7 @@ class ProgressBar {
         }
       ),
     ]);
-    Matter.World.add(document.engine.world, this.bar);
+    Matter.World.add(engine.world, this.bar);
 
     Matter.Events.on(render, "afterRender", () => {
       this.update();
@@ -100,13 +111,9 @@ class ProgressBar {
     //ctx.strokeStyle = `rgba(211, 211, 211, ${this.opacity})`
     const _boarder = this.bar.bodies[0];
     const _filling = this.bar.bodies[1];
-    this.value =
-      this.scale * Matter.Common.get(this.trakr.base, this.trakr.path, -1);
+    this.value = Matter.Common.get(this.trakr.base, this.trakr.path, 0, -1);
 
     if (this.value !== this.value_prev) {
-      Matter.Body.scale(_filling, 0, this.value / this.h); //Broken
-      console.log(this.value);
-      let _mover = _boarder.bounds.max.y - _filling.bounds.max.y;
       Matter.Body.translate(_filling, { x: 0, y: _mover });
       this.value_prev = this.value;
     }
