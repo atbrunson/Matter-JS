@@ -5,7 +5,7 @@
  *
  */
 
-import { engine, render } from "../main.js";
+import { engine, render } from "../../vite-bundle/src/main.js";
 
 /**
  * @class ProgressBar
@@ -34,8 +34,7 @@ class ProgressBar {
       path: propPath,
     };
 
-    this.value =
-      this.scale * Matter.Common.get(this.trakr.base, this.trakr.path, -1); // refctr Common.get into this class as method
+    this.value = this.scale * Matter.Common.get(this.trakr.base, this.trakr.path, -1); // refctr Common.get into this class as method
 
     this.value_prev = this.value;
     console.log("progress: ", this.value / this.h);
