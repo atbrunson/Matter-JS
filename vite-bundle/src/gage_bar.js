@@ -5,10 +5,10 @@
  *
  */
 
-import { engine, render } from "../../vite-bundle/src/main.js";
-
+import { engine, render } from "./main.js";
+import Matter from "matter-js";
 /**
- * @class ProgressBar
+ * @class GageBar
  * @param {number} x position on the canvas
  * @param {number} y position on the canvas
  * @param {} refObj Object containing tracked property
@@ -17,7 +17,7 @@ import { engine, render } from "../../vite-bundle/src/main.js";
  * @param {number} max largest value of the tracked property
  */
 
-class ProgressBar {
+class GageBar {
   constructor(x, y, refObj, propPath, min, max) {
     this.w = 20;
     this.h = 250;
@@ -33,60 +33,49 @@ class ProgressBar {
       base: refObj,
       path: propPath,
     };
+    this.value = this.scale * Matter.Common.get(this.trakr.base, this.trakr.path, -1);
+    this.value_prev = this.scale * Matter.Common.get(this.trakr.base, this.trakr.path, -1);
 
-    this.value = this.scale * Matter.Common.get(this.trakr.base, this.trakr.path, -1); // refctr Common.get into this class as method
-
-    this.value_prev = this.value;
-    console.log("progress: ", this.value / this.h);
+    console.log("Value ", this.value);
 
     //     this.value === 0 ?
     //         this.value + 0.0001
     //       : (this.progress = (this.value * this.h) / (this.max - this.min));
     //
-    let colFilter = Matter.Body.nextCategory;
+    let ui_no_collision = Matter.Body.nextCategory;
 
-    this.bar = Matter.Composite.create({ label: "progressbar" });
-
+    this.bar = Matter.Composite.create({ label: "meter" });
     Matter.Composite.add(this.bar, [
-      Matter.Bodies.fromVertices(
+      Matter.Bodies.rectangle(
         this.x + this.w / 2,
         this.y - this.h / 2,
-        [
-          { x: this.x, y: this.y },
-          { x: this.x, y: this.y - this.h },
-          { x: this.x + this.w, y: this.y - this.h },
-          { x: this.x + this.w, y: this.y },
-        ],
+        this.w,
+        this.h,
         {
-          isStatic: true,
           label: "boarder",
+          isStatic: true,
           collisionFilter: {
-            category: colFilter,
+            category: ui_no_collision,
           },
           render: {
             visible: true,
             opacity: 0.75,
             strokeStyle: "lightgrey",
-            fillStyle: "transparent",
+            fillStyle: "rgba(32, 32, 32, 0.5)",
             lineWidth: 1,
           },
         }
       ),
 
-      Matter.Bodies.fromVertices(
+      Matter.Bodies.rectangle(
         this.x + this.w / 2,
-        this.y - this.value / 2,
-        [
-          { x: this.x, y: this.y },
-          { x: this.x, y: this.y - this.value },
-          { x: this.x + this.w, y: this.y - this.value },
-          { x: this.x + this.w, y: this.y },
-        ],
+        this.y-2,
+        this.w,
+        4,
         {
-          isStatic: true,
-          label: "filling",
+          label: "needle",
           collisionFilter: {
-            category: colFilter,
+            category: ui_no_collision,
           },
           render: {
             visible: true,
@@ -98,7 +87,7 @@ class ProgressBar {
         }
       ),
     ]);
-    Matter.World.add(engine.world, this.bar);
+    Matter.World.add(document.engine.world, this.bar);
 
     Matter.Events.on(render, "afterRender", () => {
       this.update();
@@ -108,19 +97,49 @@ class ProgressBar {
   update() {
     //ctx.fillStyle = `rgba(211, 211, 211, ${this.opacity})` //sett the color styles this way would be hard use d3.js
     //ctx.strokeStyle = `rgba(211, 211, 211, ${this.opacity})`
+    
     const _boarder = this.bar.bodies[0];
-    const _filling = this.bar.bodies[1];
-    this.value = Matter.Common.get(this.trakr.base, this.trakr.path, 0, -1);
+    const _needle = this.bar.bodies[1];
+    this.value = this.scale * Matter.Common.get(this.trakr.base, this.trakr.path, -1);
 
     if (this.value !== this.value_prev) {
-      Matter.Body.translate(_filling, { x: 0, y: _mover });
+    //   Matter.Body.setVertices(_needle, [
+    //     { x: this.x, y: this.y }, //btm left
+    //     { x: this.x, y: this.y - this.value }, //top left
+    //     { x: this.x + this.w, y: this.y - this.value }, //top right
+    //     { x: this.x + this.w, y: this.y }, //btm right
+    //   ]);
+      // Matter.Body.translate(_needle, {
+      //   x: 0,
+      //   y: this.value-this.value_prev,
+      // });
       this.value_prev = this.value;
+
+     // console.log(this.value - this.value_prev, this.value / this.h);
     }
-    if (this.value / this.h < 0.25) {
-      this.bar.bodies[0].render.strokeStyle = "red";
-      this.bar.bodies[0].render.opacity = 1;
-      this.bar.bodies[1].render.fillStyle = "red";
-      this.bar.bodies[1].render.opacity = 1;
+
+    switch (true) {
+      case Math.round(this.value) / this.h > .90:
+        _boarder.render.strokeStyle = "red";
+        _boarder.render.fillStyle = "rgba(212, 32, 32, 0.25)";
+        _boarder.render.opacity = 0.75;
+        _needle.render.fillStyle = "rgba(212, 32, 32, 0.50)";
+        _needle.render.opacity = 0.75;
+      break;
+      
+      case Math.round(this.value) / this.h > 0.80:
+        _boarder.render.strokeStyle = "rgba(212, 148, 32, 0.50)";
+        _boarder.render.fillStyle = "rgba(212, 148, 32, 0.25)";
+        _boarder.render.opacity = 0.75;
+        _needle.render.fillStyle = "rgba(212, 148, 32, 0.50)";
+        _needle.render.opacity = 0.75;
+      break;qqqq
+
+      default:
+        _needle.render.fillStyle = "grey";
+        _needle.render.opacity = 0.75;
+        _boarder.render.strokeStyle = "lightgrey";
+        _boarder.render.opacity = 0.75;
     }
   }
   // //     /** TODO:
@@ -133,4 +152,4 @@ class ProgressBar {
   // //      */
 }
 
-export { ProgressBar };
+export { GageBar };
