@@ -6,7 +6,7 @@
  * @description This module defines a Player class that can be controlled via keyboard inputs in a Matter
  */
 
-import { engine } from "../main.js";
+import { engine } from "./main.js";
 import { KeyboardControl } from "./keyboard_control.js";
 
 /**
