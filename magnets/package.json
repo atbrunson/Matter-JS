@@ -1,0 +1,20 @@
+{
+  "name": "magnets",
+  "version": "1.0.0",
+  "description": "magnets  from matterjs attractors plugin",
+  "homepage": "https://github.com/liabru/matter-attractors#readme",
+  "bugs": {
+    "url": "https://github.com/liabru/matter-attractors/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liabru/matter-attractors.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "npm run dev"
+  }
+}
