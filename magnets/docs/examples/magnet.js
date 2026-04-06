@@ -28,6 +28,7 @@ Example.magnet = function () {
       width: Math.min(document.documentElement.clientWidth, 1024),
       height: Math.min(document.documentElement.clientHeight, 1024),
       wireframes: false,
+      showAngleIndicator: true,
     },
   });
 
@@ -38,8 +39,10 @@ Example.magnet = function () {
   Render.run(render);
 
   // create demo scene
+
   var world = engine.world;
-  world.gravity.scale = 0;
+  world.gravity.scale = 0.0;
+  console.log(engine)
 
   // create a body with an attractor
   var attractiveBody = Bodies.circle(
@@ -47,34 +50,64 @@ Example.magnet = function () {
     render.options.height / 2,
     50,
     {
+      mass: Infinity,
+      restitution: 0.0,
+      friction: 0.0,
       isStatic: true,
-
+      
       // example of an attractor function that
       // returns a force vector that applies to bodyB
       plugin: {
         attractors: [
           function (bodyA, bodyB) {
+            let topA = {
+              x:
+                bodyA.position.x +
+                (bodyA.bounds.min.y - bodyA.position.y) *
+                  Math.sin(bodyA.angle - Math.PI / 2), // the x component distance from the center to the top (ie north)
+              y:
+                bodyA.position.y -
+                (bodyA.bounds.min.y - bodyA.position.y) *
+                  Math.cos(bodyA.angle - Math.PI / 2),
+            };
+            let botB = { 
+              x:
+                bodyB.position.x -
+                (bodyB.bounds.max.y - bodyB.position.y) *
+                  Math.sin(bodyB.angle - Math.PI / 2), // the x component distance from the center to the bottom (ie south)
+              y:
+                bodyB.position.y +
+                (bodyB.bounds.max.y - bodyB.position.y) *
+                  Math.cos(bodyB.angle - Math.PI / 2),
+              
+            }
+            //console.log(topA);
+            //console.log(bodyA.position);
             return {
-              x: (bodyA.position.x - bodyB.position.x) * 1e-6,
-              y: (bodyA.position.y - bodyB.position.y) * 1e-6,
+              x: (topA.x - botB.x) * 1e-5, //Math.sin(badyA.angle - Math.PI / 2)
+              y: (topA.y - botB.y) * 1e-5, // bodyA.bounds.min.y*Math.cos(this.body.angle - Math.PI / 2)
             };
           },
         ],
       },
     },
   );
-
+  Body.rotate(attractiveBody, -Math.PI / 2);
   World.add(world, attractiveBody);
+  //console.log(attractiveBody);
 
   // add some bodies that to be attracted
-  for (var i = 0; i < 150; i += 1) {
+  for (var i = 0; i < 1; i += 1) {
     var body = Bodies.polygon(
       Common.random(0, render.options.width),
       Common.random(0, render.options.height),
-      Common.random(1, 5),
-      Common.random() > 0.9 ? Common.random(15, 25) : Common.random(5, 10),
+      Common.random(1, 1),
+      Common.random() > 0.9 ? Common.random(15, 25) : Common.random(10, 10),
     );
-
+    body.friction = 0.001;
+    body.restitution = 0.0;
+    body.frictionAir = 0.05;
+    Body.rotate(body, -Math.PI/4);
     World.add(world, body);
   }
 
