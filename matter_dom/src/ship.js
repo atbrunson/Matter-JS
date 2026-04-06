@@ -19,9 +19,9 @@
 //engine = get element by typ Matter.Engine
 //engine.world =  get element by typ Matter.Engine.World
 
-import { engine, render } from "../main.js";
+import { engine, render } from "./main.js";
 import { KeyboardControl } from "./keyboard_control.js";
-
+import Matter from "matter-js";
 class Ship {
   /**
    * @constructs Ship object
@@ -85,7 +85,7 @@ class Ship {
    */
   update() {
     this.speed = this.body.speed;
-  
+
     // this.handleThrust()
     /*
 		Mass Balance:

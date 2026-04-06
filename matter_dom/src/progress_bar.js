@@ -5,8 +5,8 @@
  *
  */
 
-import { engine, render } from "../../vite-bundle/src/main.js";
-
+import { engine, render } from "./main.js";
+import Matter from "matter-js";
 /**
  * @class ProgressBar
  * @param {number} x position on the canvas
@@ -43,50 +43,41 @@ class ProgressBar {
     //         this.value + 0.0001
     //       : (this.progress = (this.value * this.h) / (this.max - this.min));
     //
-    let colFilter = Matter.Body.nextCategory;
+    let ui_no_collision = Matter.Body.nextCategory;
 
     this.bar = Matter.Composite.create({ label: "progressbar" });
-
     Matter.Composite.add(this.bar, [
-      Matter.Bodies.fromVertices(
+      Matter.Bodies.rectangle(
         this.x + this.w / 2,
         this.y - this.h / 2,
-        [
-          { x: this.x, y: this.y },
-          { x: this.x, y: this.y - this.h },
-          { x: this.x + this.w, y: this.y - this.h },
-          { x: this.x + this.w, y: this.y },
-        ],
+        this.w,
+        this.h,
         {
-          isStatic: true,
           label: "boarder",
+          isStatic: true,
           collisionFilter: {
-            category: colFilter,
+            category: ui_no_collision,
           },
           render: {
             visible: true,
             opacity: 0.75,
             strokeStyle: "lightgrey",
-            fillStyle: "transparent",
+            fillStyle: "rgba(32, 32, 32, 0.5)",
             lineWidth: 1,
           },
         }
       ),
 
-      Matter.Bodies.fromVertices(
+      Matter.Bodies.rectangle(
         this.x + this.w / 2,
         this.y - this.value / 2,
-        [
-          { x: this.x, y: this.y },
-          { x: this.x, y: this.y - this.value },
-          { x: this.x + this.w, y: this.y - this.value },
-          { x: this.x + this.w, y: this.y },
-        ],
+        this.w,
+        this.value,
         {
-          isStatic: true,
           label: "filling",
+          isStatic: true,
           collisionFilter: {
-            category: colFilter,
+            category: ui_no_collision,
           },
           render: {
             visible: true,
@@ -98,7 +89,7 @@ class ProgressBar {
         }
       ),
     ]);
-    Matter.World.add(engine.world, this.bar);
+    Matter.World.add(document.engine.world, this.bar);
 
     Matter.Events.on(render, "afterRender", () => {
       this.update();
@@ -110,17 +101,46 @@ class ProgressBar {
     //ctx.strokeStyle = `rgba(211, 211, 211, ${this.opacity})`
     const _boarder = this.bar.bodies[0];
     const _filling = this.bar.bodies[1];
-    this.value = Matter.Common.get(this.trakr.base, this.trakr.path, 0, -1);
+    this.value = this.scale * Matter.Common.get(this.trakr.base, this.trakr.path, -1);
 
     if (this.value !== this.value_prev) {
-      Matter.Body.translate(_filling, { x: 0, y: _mover });
+      Matter.Body.setVertices(_filling, [
+        { x: this.x, y: this.y }, //btm left
+        { x: this.x, y: this.y - this.value }, //top left
+        { x: this.x + this.w, y: this.y - this.value }, //top right
+        { x: this.x + this.w, y: this.y }, //btm right
+      ]);
+      Matter.Body.translate(_filling, {
+        x: 0,
+        y: (this.value_prev - this.value) / 2,
+      });
       this.value_prev = this.value;
+
+      console.log(this.value / this.h);
     }
-    if (this.value / this.h < 0.25) {
-      this.bar.bodies[0].render.strokeStyle = "red";
-      this.bar.bodies[0].render.opacity = 1;
-      this.bar.bodies[1].render.fillStyle = "red";
-      this.bar.bodies[1].render.opacity = 1;
+
+    switch (true) {
+      case this.value / this.h < 0.25:
+        _boarder.render.strokeStyle = "red";
+        _boarder.render.fillStyle = "rgba(212, 32, 32, 0.25)";
+        _boarder.render.opacity = 0.75;
+        _filling.render.fillStyle = "rgba(212, 32, 32, 0.50)";
+        _filling.render.opacity = 0.75;
+      break;
+      
+      case this.value / this.h < 0.40:
+        _boarder.render.strokeStyle = "rgba(212, 148, 32, 0.50)";
+        _boarder.render.fillStyle = "rgba(212, 148, 32, 0.25)";
+        _boarder.render.opacity = 0.75;
+        _filling.render.fillStyle = "rgba(212, 148, 32, 0.50)";
+        _filling.render.opacity = 0.75;
+      break;
+
+      default:
+        _filling.render.fillStyle = "grey";
+        _filling.render.opacity = 0.75;
+        _boarder.render.strokeStyle = "lightgrey";
+        _boarder.render.opacity = 0.75;
     }
   }
   // //     /** TODO:
