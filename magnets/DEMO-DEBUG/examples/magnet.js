@@ -42,10 +42,10 @@ Example.magnet = function () {
 
   var world = engine.world;
   world.gravity.scale = 0.0;
-  console.log(engine)
+  console.log(engine);
 
   // create a body with an attractor
-  var attractiveBody = Bodies.circle(
+  var attractiveBody0 = Bodies.circle(
     render.options.width / 2,
     render.options.height / 2,
     50,
@@ -53,8 +53,8 @@ Example.magnet = function () {
       mass: Infinity,
       restitution: 0.0,
       friction: 0.0,
-      isStatic: true,
-      
+      isStatic: false,
+
       // example of an attractor function that
       // returns a force vector that applies to bodyB
       plugin: {
@@ -70,7 +70,7 @@ Example.magnet = function () {
                 (bodyA.bounds.min.y - bodyA.position.y) *
                   Math.cos(bodyA.angle - Math.PI / 2),
             };
-            let botB = { 
+            let botB = {
               x:
                 bodyB.position.x -
                 (bodyB.bounds.max.y - bodyB.position.y) *
@@ -79,8 +79,7 @@ Example.magnet = function () {
                 bodyB.position.y +
                 (bodyB.bounds.max.y - bodyB.position.y) *
                   Math.cos(bodyB.angle - Math.PI / 2),
-              
-            }
+            };
             //console.log(topA);
             //console.log(bodyA.position);
             return {
@@ -92,8 +91,54 @@ Example.magnet = function () {
       },
     },
   );
-  Body.rotate(attractiveBody, -Math.PI / 2);
-  World.add(world, attractiveBody);
+  var attractiveBody1 = Bodies.circle(
+    render.options.width / 2,
+    render.options.height / 3,
+    50,
+    {
+      mass: Infinity,
+      restitution: 0.0,
+      friction: 0.0,
+      isStatic: false,
+
+      // example of an attractor function that
+      // returns a force vector that applies to bodyB
+      plugin: {
+        attractors: [
+          function (bodyA, bodyB) {
+            let topA = {
+              x:
+                bodyA.position.x +
+                (bodyA.bounds.min.y - bodyA.position.y) *
+                  Math.sin(bodyA.angle - Math.PI / 2), // the x component distance from the center to the top (ie north)
+              y:
+                bodyA.position.y -
+                (bodyA.bounds.min.y - bodyA.position.y) *
+                  Math.cos(bodyA.angle - Math.PI / 2),
+            };
+            let botB = {
+              x:
+                bodyB.position.x -
+                (bodyB.bounds.max.y - bodyB.position.y) *
+                  Math.sin(bodyB.angle - Math.PI / 2), // the x component distance from the center to the bottom (ie south)
+              y:
+                bodyB.position.y +
+                (bodyB.bounds.max.y - bodyB.position.y) *
+                  Math.cos(bodyB.angle - Math.PI / 2),
+            };
+            //console.log(topA);
+            //console.log(bodyA.position);
+            return {
+              x: (topA.x - botB.x) * 1e-5, //Math.sin(badyA.angle - Math.PI / 2)
+              y: (topA.y - botB.y) * 1e-5, // bodyA.bounds.min.y*Math.cos(this.body.angle - Math.PI / 2)
+            };
+          },
+        ],
+      },
+    },
+  );
+
+  World.add(world, [attractiveBody1, attractiveBody0]);
   //console.log(attractiveBody);
 
   // add some bodies that to be attracted
@@ -107,7 +152,7 @@ Example.magnet = function () {
     body.friction = 0.001;
     body.restitution = 0.0;
     body.frictionAir = 0.05;
-    Body.rotate(body, -Math.PI/4);
+    Body.rotate(body, -Math.PI / 4);
     World.add(world, body);
   }
 
@@ -120,9 +165,9 @@ Example.magnet = function () {
     }
 
     // smoothly move the attractor body towards the mouse
-    Body.translate(attractiveBody, {
-      x: (mouse.position.x - attractiveBody.position.x) * 0.25,
-      y: (mouse.position.y - attractiveBody.position.y) * 0.25,
+    Body.translate(attractiveBody1, {
+      x: (mouse.position.x - attractiveBody1.position.x) * 0.25,
+      y: (mouse.position.y - attractiveBody1.position.y) * 0.25,
     });
   });
 

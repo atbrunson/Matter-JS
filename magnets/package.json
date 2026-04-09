@@ -16,5 +16,8 @@
   "main": "main.js",
   "scripts": {
     "test": "npm run dev"
+  },
+  "dependencies": {
+    "matter-tools": "^0.14.0"
   }
 }
