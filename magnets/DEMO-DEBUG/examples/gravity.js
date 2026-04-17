@@ -52,7 +52,8 @@ Example.gravity = function() {
       radius,
       {
         mass: Common.random(10, 15),
-        frictionAir: 0,
+        frictionAir: 0.00010,
+        frenctionStatic: 0.5,
         plugin: {
           attractors: [
             // there is a built in helper function for Newtonian gravity!

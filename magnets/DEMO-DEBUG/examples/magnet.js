@@ -16,7 +16,8 @@ Example.magnet = function () {
     Mouse = Matter.Mouse,
     Common = Matter.Common,
     Bodies = Matter.Bodies;
-
+    Vertices = Matter.Vertices;
+    Vector = Matter.Vector;
   // create engine
   var engine = Engine.create();
 
@@ -60,26 +61,9 @@ Example.magnet = function () {
       plugin: {
         attractors: [
           function (bodyA, bodyB) {
-            let topA = {
-              x:
-                bodyA.position.x +
-                (bodyA.bounds.min.y - bodyA.position.y) *
-                  Math.sin(bodyA.angle - Math.PI / 2), // the x component distance from the center to the top (ie north)
-              y:
-                bodyA.position.y -
-                (bodyA.bounds.min.y - bodyA.position.y) *
-                  Math.cos(bodyA.angle - Math.PI / 2),
-            };
-            let botB = {
-              x:
-                bodyB.position.x -
-                (bodyB.bounds.max.y - bodyB.position.y) *
-                  Math.sin(bodyB.angle - Math.PI / 2), // the x component distance from the center to the bottom (ie south)
-              y:
-                bodyB.position.y +
-                (bodyB.bounds.max.y - bodyB.position.y) *
-                  Math.cos(bodyB.angle - Math.PI / 2),
-            };
+            let topA = Vertices.mean([bodyA.vertices[0], bodyA.vertices[bodyA.vertices.length - 1]]);
+            
+            let botB = (Vertices.mean([bodyB.vertices[0], bodyB.vertices[bodyB.vertices.length - 1]]))
             //console.log(topA);
             //console.log(bodyA.position);
             return {
@@ -106,26 +90,9 @@ Example.magnet = function () {
       plugin: {
         attractors: [
           function (bodyA, bodyB) {
-            let topA = {
-              x:
-                bodyA.position.x +
-                (bodyA.bounds.min.y - bodyA.position.y) *
-                  Math.sin(bodyA.angle - Math.PI / 2), // the x component distance from the center to the top (ie north)
-              y:
-                bodyA.position.y -
-                (bodyA.bounds.min.y - bodyA.position.y) *
-                  Math.cos(bodyA.angle - Math.PI / 2),
-            };
-            let botB = {
-              x:
-                bodyB.position.x -
-                (bodyB.bounds.max.y - bodyB.position.y) *
-                  Math.sin(bodyB.angle - Math.PI / 2), // the x component distance from the center to the bottom (ie south)
-              y:
-                bodyB.position.y +
-                (bodyB.bounds.max.y - bodyB.position.y) *
-                  Math.cos(bodyB.angle - Math.PI / 2),
-            };
+            let topA = Vertices.mean([bodyA.vertices[0], bodyA.vertices[bodyA.vertices.length - 1]]);
+            
+            let botB = Vertices.mean([bodyB.vertices[0], bodyB.vertices[bodyB.vertices.length - 1]]);
             //console.log(topA);
             //console.log(bodyA.position);
             return {
@@ -138,7 +105,7 @@ Example.magnet = function () {
     },
   );
 
-  World.add(world, [attractiveBody1, attractiveBody0]);
+  World.add(world, [attractiveBody1,attractiveBody0]);
   //console.log(attractiveBody);
 
   // add some bodies that to be attracted
