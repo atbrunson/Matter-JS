@@ -20,7 +20,7 @@ Example.magnet = function () {
   Vector = Matter.Vector;
   // create engine
   var engine = Engine.create();
-
+  engine.gravity.scale = 0.0;
   // create renderer
   var render = Render.create({
     element: document.body,
@@ -42,7 +42,6 @@ Example.magnet = function () {
   // create demo scene
 
   var world = engine.world;
-  world.gravity.scale = 0.0;
 
   // Magnet polarization grid engine
   // - initialize new engine
@@ -61,6 +60,11 @@ Example.magnet = function () {
   //  - context.endPath();
 
   // function add permenent magnet properties to a body
+  // function to add femagnetic properties to a body
+  let magnetic = function (bodyA, bodyB) {
+    // forces of the magnet body and the magnetic body are equal to each other
+  };
+
   let magnet = function (bodyA, bodyB) {
     // axis of the magnetization
     let magA = bodyA.axes[bodyA.axes.length - 1];
@@ -91,8 +95,8 @@ Example.magnet = function () {
     ]);
 
     let botB = Vertices.mean([
-      bodyB.vertices[Math.floor((bodyB.vertices.length - 1) / 2)],
-      bodyB.vertices[Math.ceil((bodyB.vertices.length - 1) / 2)],
+      bodyB.vertices[Math.floor((bodyA.vertices.length - 1) / 2)],
+      bodyB.vertices[Math.ceil((bodyA.vertices.length - 1) / 2)],
     ]);
 
     return {
@@ -102,15 +106,11 @@ Example.magnet = function () {
     };
   };
 
-  // function to add femagnetic properties to a body
-  let magnetic = function (bodyA, bodyB) {
-    // forces of the magnet body and the magnetic body are equal to each other
-  };
-
   // create a body with an attractor
-  var attractiveBody0 = Bodies.circle(
+  var attractiveBody0 = Bodies.polygon(
     render.options.width / 2,
     render.options.height / 2,
+    6,
     50,
     {
       mass: 10,
@@ -125,7 +125,35 @@ Example.magnet = function () {
       // },
     },
   );
-  Body.rotate(attractiveBody0, -Math.PI);
+
+  attractiveBody0.magnet = {
+    top: Vertices.mean([
+      attractiveBody0.vertices[0],
+      attractiveBody0.vertices[attractiveBody0.vertices.length - 1],
+    ]),
+    bottom: Vertices.mean([
+      attractiveBody0.vertices[Math.floor((attractiveBody0.vertices.length - 1) / 2)],
+      attractiveBody0.vertices[Math.ceil((attractiveBody0.vertices.length - 1) / 2)],
+    ]),
+    left: 0,
+    right: 0,
+    update() {
+      this.top = Vertices.mean([
+        attractiveBody0.vertices[0],
+        attractiveBody0.vertices[attractiveBody0.vertices.length - 1],
+      ]);
+      this.bottom = Vertices.mean([
+        attractiveBody0.vertices[
+          Math.floor((attractiveBody0.vertices.length - 1) / 2)
+        ],
+        attractiveBody0.vertices[
+          Math.ceil((attractiveBody0.vertices.length - 1) / 2)
+        ],
+      ]);
+    },
+  };
+
+  Body.rotate(attractiveBody0, Math.PI / 9);
   var attractiveBody1 = Bodies.circle(
     render.options.width / 4,
     render.options.height / 4,
@@ -143,7 +171,6 @@ Example.magnet = function () {
       },
     },
   );
-  Body.rotate(attractiveBody0, 0);
 
   World.add(world, [attractiveBody1, attractiveBody0]);
 
@@ -170,13 +197,26 @@ Example.magnet = function () {
       return;
     }
 
+    attractiveBody0.magnet.update();
+
     // smoothly move the attractor body towards the mouse
-    Body.translate(attractiveBody1, {
-      x: (mouse.position.x - attractiveBody1.position.x) * 0.25,
-      y: (mouse.position.y - attractiveBody1.position.y) * 0.25,
-    });
+    // Body.translate(attractiveBody1, {
+    //   x: (mouse.position.x - attractiveBody1.position.x) * 0.25,
+    //   y: (mouse.position.y - attractiveBody1.position.y) * 0.25,
+    // });
   });
 
+  Events.on(render, "afterRender", function () {
+    // draw mouse position
+    render.context.globalCompositeOperation = "source-over";
+    render.context.fillStyle = "rgba(255,255,255,0.9)";
+    render.context.fillText(
+      Math.floor(mouse.position.x) + " , " + Math.floor(mouse.position.y),
+      mouse.position.x + 15,
+      mouse.position.y + 30,
+    );
+  });
+  console.log("attractiveBody0: ", attractiveBody0);
   console.log("engine: ", engine);
   console.log("render: ", render);
   console.log("runner: ", runner);

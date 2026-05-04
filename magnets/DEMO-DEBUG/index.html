@@ -9,13 +9,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title></title>
-    <script src="./libs/matter.js"></script>
+    <script src="./libs/matter-0-20-0.js"></script>
     <script src="./libs/matter-tools.min.js"></script>
     <script src="./libs/matter-wrap.js"></script>
     <script src="./libs/bundle.js"></script>
-    <script src="./examples/basic.js"></script>
-    <script src="./examples/gravity.js"></script>
+    <script src="./examples/vector_field.js"></script>
     <script src="./examples/magnet.js"></script>
+    <script src="./examples/gravity.js"></script>
+    <script src="./examples/basic.js"></script>
     <style type="text/css">
       * {
         box-sizing: border-box;
@@ -51,7 +52,13 @@
         },
 
         examples: [
-          {
+        {
+            name: "Vector Field",
+            id: "vector_field",
+            init: Example.vector_field,
+            sourceLink: repoUrl,
+          },  
+        {
             name: "Magnet",
             id: "magnet",
             init: Example.magnet,
