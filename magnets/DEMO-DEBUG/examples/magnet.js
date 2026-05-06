@@ -66,7 +66,14 @@ Example.magnet = function () {
   };
 
   let magnet = function (bodyA, bodyB) {
-    // axis of the magnetization
+    // determine the magentization of the body
+    // - axis.last
+    // - default magnitude = length of body [A/pixle]
+    // determine the demagnetization factor from body geometry
+    // determine the induced magnetic field resulting from the demagentization and magnetization fields
+    // - sum of the vectors alond the sides perpendicular to the axis
+    
+    // axis of the magnetization  
     let magA = bodyA.axes[bodyA.axes.length - 1];
     // test if bodyB is also a magnet
     if (bodyB.isMagnet) {
@@ -104,6 +111,10 @@ Example.magnet = function () {
       x: (topA.x - botB.x) * 1e-5, //Math.sin(badyA.angle - Math.PI / 2)
       y: (topA.y - botB.y) * 1e-5, //bodyA.bounds.min.y*Math.cos(this.body.angle - Math.PI / 2)
     };
+  
+  
+  
+  
   };
 
   // create a body with an attractor
